@@ -1,4 +1,4 @@
-P8105 Final Project - Group AAAD
+P8105 Final Project Proposal - Group AAAD
 ================
 Anjile An, Ashley Kang, Amelia Grant-Alfieri, Divya Bisht
 Due December 11, 2018
