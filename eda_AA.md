@@ -5,6 +5,8 @@ Due November 25, 2018
 
 ### Read and clean data
 
+We are interested at looking at the associations between air quality (fine particulate matter PM2.5 as a proxy) and acute adverse health outcomes, specifically asthma and cardiovascular disease related hospitalizations in New York City.
+
 ``` r
 # Asthma emergency department visit rate per 10,000 by county
 # Source: NYSDOH Health Data NY
