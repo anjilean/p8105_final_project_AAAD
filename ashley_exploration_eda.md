@@ -5,7 +5,7 @@ Ashley Kang
 
 ### Loading and cleaning data
 
-1.  Annual Average of Fine Particulate Matter (PM 2.5) in NYC, 2001 - 2016
+Annual Average of Fine Particulate Matter (PM 2.5) in NYC, 2001 - 2016
 
 -   Data source: NYC DOHMH Environmental & Health Data
 
@@ -16,7 +16,34 @@ pollution_data = read_csv(file = "./data_AK/Trends_in_Fine_Particulate_Matter_An
   rename(year = x_value, PM_2.5 = y_value)
 ```
 
-1.  Asthma Emergency Department Visit Rate per 10,000 by County in NYC, 2014
+Annual Air Quality Index in NYC, 2012 - 2014
+
+-   Data source: US EPA
+
+``` r
+aqi_2012 = read_csv(file = "./data_AK/annual_aqi_by_county_2012.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(state %in% "New York", 
+         county %in% c("Bronx", "Kings", "New York", "Queens", 
+                       "Richmond")) %>% 
+  select(-state, -year)
+  
+aqi_2013 = read_csv(file = "./data_AK/annual_aqi_by_county_2013.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(state %in% "New York", 
+         county %in% c("Bronx", "Kings", "New York", "Queens", 
+                       "Richmond")) %>% 
+  select(-state, -year)
+
+aqi_2014 = read_csv(file = "./data_AK/annual_aqi_by_county_2014.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(state %in% "New York", 
+         county %in% c("Bronx", "Kings", "New York", "Queens", 
+                       "Richmond")) %>% 
+  select(-state, -year)
+```
+
+Asthma Emergency Department Visit Rate per 10,000 by County in NYC, 2014
 
 -   Data source: NYSDOH Health Data
 
@@ -29,7 +56,7 @@ asthma_ed_data = read_csv(file = "./data_AK/PA__Asthma_Emergency_Department_Visi
                             "Richmond"))
 ```
 
-1.  Age-Adjusted Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
+Age-Adjusted Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
 
 -   Data source: NYSDOH Health Data
 
@@ -104,6 +131,64 @@ pollution_data %>%
 ![](ashley_exploration_eda_files/figure-markdown_github/pm_graph-1.png)
 
 Average annual PM 2.5 recordings were highest in 2001 and has generally decreased as we reach 2016.
+
+Number of Days with PM 2.5 Reading in NYC, 2012 - 2014
+
+``` r
+aqi_pm_2012_graph = aqi_2012 %>% 
+  ggplot(aes(x = county, y = days_pm2_5)) +
+  labs(
+    title = "2012",
+    x = "County",
+    y = "Number of days") +
+  geom_histogram(stat = "identity", aes(fill = county)) + 
+  viridis::scale_fill_viridis(name = "County", discrete = TRUE) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+        legend.position = "none")
+```
+
+    ## Warning: Ignoring unknown parameters: binwidth, bins, pad
+
+``` r
+aqi_pm_2013_graph = aqi_2013 %>% 
+  ggplot(aes(x = county, y = days_pm2_5)) +
+  labs(
+    title = "2013",
+    x = "County",
+    y = "Number of days") +
+  geom_histogram(stat = "identity", aes(fill = county)) + 
+  viridis::scale_fill_viridis(name = "County", discrete = TRUE) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+        legend.position = "none")
+```
+
+    ## Warning: Ignoring unknown parameters: binwidth, bins, pad
+
+``` r
+aqi_pm_2014_graph = aqi_2014 %>% 
+  ggplot(aes(x = county, y = days_pm2_5)) +
+  labs(
+    title = "2014",
+    x = "County",
+    y = "Number of days") +
+  geom_histogram(stat = "identity", aes(fill = county)) + 
+  viridis::scale_fill_viridis(name = "County", discrete = TRUE) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+        legend.position = "none")
+```
+
+    ## Warning: Ignoring unknown parameters: binwidth, bins, pad
+
+``` r
+aqi_pm_2012_graph + aqi_pm_2013_graph + aqi_pm_2014_graph
+```
+
+![](ashley_exploration_eda_files/figure-markdown_github/aqi_pm_graph-1.png)
+
+Kings County had the most number of days that recorded PM 2.5 levels across all three years.
 
 ### Comments:
 
