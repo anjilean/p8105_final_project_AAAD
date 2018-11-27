@@ -1,13 +1,31 @@
 ---
-title: "ashley_exploration_eda"
+title: "Ashley's Exploratory Data Analysis"
 author: "Ashley Kang"
 date: "11/20/2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(purrr)
+library(broom)
+library(rvest)
+library(ggridges)
+library(viridis)
+library(patchwork)
 ```
 
-## R Markdown
+## Loading data
+
+1. Annual Average of Fine Particulate Matter (PM 2.5) from 2001 - 2016 
+
+* Data source:
+
+```{r load_clean_pm_1, message = FALSE}
+pollution_data = read_csv(file = "./data_AK/Trends_in_Fine_Particulate_Matter_Annual_Average.csv") %>% 
+  janitor::clean_names() %>%
+  select(x_value, y_value) %>% 
+  rename(year = x_value, PM_2.5 = y_value)
+```
 
