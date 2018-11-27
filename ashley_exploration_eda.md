@@ -29,7 +29,7 @@ asthma_ed_data = read_csv(file = "./data_AK/PA__Asthma_Emergency_Department_Visi
                             "Richmond"))
 ```
 
-1.  Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
+1.  Age-Adjusted Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
 
 -   Data source: NYSDOH Health Data
 
@@ -67,7 +67,7 @@ asthma_ed_data %>%
 
 Asthma emergency department visits are highest in Bronx (substantially higher than the next highest county which is New York), while Richmond County (Staten Island) reports the fewest asthma emergency department visits.
 
-CVD Hospitalization Rate in NYC, 2012 - 2014
+Age-Adjusted CVD Hospitalization Rate in NYC, 2012 - 2014
 
 ``` r
 cvd_data %>%
@@ -104,3 +104,13 @@ pollution_data %>%
 ![](ashley_exploration_eda_files/figure-markdown_github/pm_graph-1.png)
 
 Average annual PM 2.5 recordings were highest in 2001 and has generally decreased as we reach 2016.
+
+### Comments:
+
+-   Is it a problem if we have age-adjusted measures for CVD but not for asthma? More older people (compared to younger people) will be hospitalized for CVD, but do asthma hospitalizations vary by age?
+
+-   What do we do about the year range? CVD data is from 2012-2014, asthma data is from 2014, annual average readings of PM 2.5 is from 2001-2016.
+
+-   Haven't checked yet, but are there datasets with more years collected? Like from 2006 - 2014? It would be cool to explore whether asthma/CVD hospitalizations also decreased as PM 2.5 levels decreased over time.
+
+-   Potential limitation: no demographic data associated with hospitalization visits. Could SES, race, insurance status, etc. affect whether people visit the hospital even in cases of emergency?
