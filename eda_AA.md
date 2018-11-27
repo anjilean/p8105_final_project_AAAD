@@ -5,6 +5,8 @@ Due November 25, 2018
 
 ### Read and clean data
 
+We are interested at looking at the associations between air quality (fine particulate matter PM2.5 as a proxy) and acute adverse health outcomes, specifically asthma and cardiovascular disease related hospitalizations in New York City.
+
 ``` r
 # Asthma emergency department visit rate per 10,000 by county
 # Source: NYSDOH Health Data NY
@@ -131,11 +133,11 @@ nyc_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>%
     ##   `Days PM10` = col_integer()
     ## )
 
-`asthma_ed` data years is only 2014, where as `asthma_hosp_017` and `cvd_hosp` use 2012-2014 data.
+`asthma_ed` data years is only 2014, where as `asthma_hosp_017` and `cvd_hosp` use 2012-2014 data. The `nyc_pm25_trends` data has 2001-2016 yearly average, which may not be that useful for our purposes, since we are limited by year. Read and cleaned US EPA AQS data for 2014 in NYC instead, since it has borough-level data which is more consistent with the rest of our data.
 
 Considerations:
 
--   Rename "Kings" to Brooklyn, "Richmond" to Staten Island, and "New York" to Manhattan? (Colloquial names vs formal borough names)
+-   Rename "Kings" to Brooklyn, "Richmond" to Staten Island, and "New York" to Manhattan? (County names vs. borough names)
 
 -   How to include the PM 2.5?
 
@@ -208,7 +210,7 @@ pm_hist
 
 ![](eda_AA_files/figure-markdown_github/pm_plots-1.png)
 
-Trends in of number of days of PM 2.5 does not appear to follow the same trends of hospitalizations ...
+Trends in of number of days of PM 2.5 does not appear to follow the same trends of hospitalizations ... interesting.
 
 ``` r
 asthma_ed_hist + cvd_hosp_hist + pm_hist
