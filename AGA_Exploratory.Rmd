@@ -24,7 +24,13 @@ PM = read_csv("PM2.5_2014.csv") %>%
   janitor::clean_names() %>%
   filter(borough == "Bronx" | borough == "Brooklyn" | borough == "Queens" | borough == "Staten Island" | borough == "Manhattan") %>%
   filter(geo_type_name == "Borough") %>%
-  select(-geo_type_name, -geography, -geography_id, -indicator_name)
+  select(-geo_type_name, -geography, -geography_id, -indicator_name) %>%
+  rename(PM_mean = mean_mcg_per_cubic_meter, 
+         PM_tenth_percentile = x10th_percentile_mcg_per_cubic_meter,
+         PM_ninety_percentile = x90th_percentile_mcg_per_cubic_meter, 
+         PM_year = year,
+         county_name = borough) %>%
+  mutate(county_name = recode(county_name, "Brooklyn" = "Kings", "Staten Island" = "Richmond", "Manhattan" = "New York"))
 ```
 
 ### Create Children's Asthma Hospitalization Rate Dataset, 2012-14
@@ -32,7 +38,9 @@ PM = read_csv("PM2.5_2014.csv") %>%
 asthma_hosp_child = read_csv("asthma_hosp_rate_10000_age0-17.csv") %>%
   janitor::clean_names() %>%
   filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percent_rate, data_years)
+  select(county_name, percent_rate, data_years) %>%
+  rename(asthma_hosp_percent_rate = percent_rate, 
+         asthma_hosp_years = data_years)
 ```
 
 ### Create Asthma ER Admissions Rate Dataset, 2014
@@ -40,7 +48,9 @@ asthma_hosp_child = read_csv("asthma_hosp_rate_10000_age0-17.csv") %>%
 asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
   janitor::clean_names() %>%
   filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percentage_rate_ratio, data_years)
+  select(county_name, percentage_rate_ratio, data_years) %>%
+  rename(asthma_ER_percent_rate = percentage_rate_ratio, 
+         asthma_ER_years = data_years)
 ```
 
 ### Create Age-Adjusted Cardiovascular Hospitalization Rates Dataset, 2012-14
@@ -48,7 +58,9 @@ asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
 aa_CVD_hosp = read_csv("age_adj_CVD_hosp_rate_10000.csv") %>%
   janitor::clean_names() %>%
   filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percent_rate, data_years)
+  select(county_name, percent_rate, data_years) %>%
+  rename(aa_CVD_percent_rate = percent_rate, 
+         aa_CVD_years = data_years)
 ```
 
 ### Create Age-Adjusted Heart Attack Hospitalization Rates Dataset, 2014
@@ -56,49 +68,55 @@ aa_CVD_hosp = read_csv("age_adj_CVD_hosp_rate_10000.csv") %>%
 aa_heart_attack_hosp = read_csv("age_adj_heart_attack_hosp_rate_10000.csv") %>%
   janitor::clean_names() %>%
   filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percentage_rate_ratio, data_years)
+  select(county_name, percentage_rate_ratio, data_years) %>%
+  rename(aa_hattack_percent_rate = percentage_rate_ratio,
+         aa_hattack_years = data_years)
 ```
 
 ### Plot Heart Attack Hospital Visits per Borough
 ```{r}
 heart_attack = aa_heart_attack_hosp %>%
-  ggplot(aes(x = county_name, y = percentage_rate_ratio, group = 1)) + geom_histogram(stat = "identity")
+  ggplot(aes(x = county_name, y = aa_hattack_percent_rate, group = 1)) + geom_histogram(stat = "identity")
 heart_attack
 ```
 
 ### Plot Asthma ER Admissions per Borough
 ```{r}
 asthma = asthma_ER %>%
-    ggplot(aes(x = county_name, y = percentage_rate_ratio, group = 1)) + geom_histogram(stat = "identity") 
+    ggplot(aes(x = county_name, y = asthma_ER_percent_rate, group = 1)) + geom_histogram(stat = "identity") 
 asthma 
 ```
 
 ### Plot PM 2.5 levels per Borough
 ```{r}
-PM = PM %>%
-ggplot(aes(x = borough, y = mean_mcg_per_cubic_meter, group = 1)) + geom_histogram(stat = "identity")
-PM
+PM_plot = PM %>%
+ggplot(aes(x = county_name, y = PM_mean, group = 1)) + geom_histogram(stat = "identity")
+PM_plot
 ```
 
 ### Join heart attack, asthma, and PM datasets
 ```{r}
+ha_asthma_joined = inner_join(aa_heart_attack_hosp, asthma_ER, by = "county_name")
 
+joined = inner_join(ha_asthma_joined, PM, by = "county_name")
 ```
 
 ### Plot Heart Attack & PM2.5, 2014
 ```{r}
-#heart_attack_PM =  %>%  #use TBD joined dataframe
-#ggplot(aes(x = borough, y = mean_mcg_per_cubic_meter, group = 1)) + geom_histogram(stat = "identity")
-#heart_attack_PM
+heart_attack_PM = joined %>%  
+  ggplot(aes(x = PM_mean, y = aa_hattack_percent_rate)) + geom_line()
+heart_attack_PM
 ```
 
 ## Plot Asthma & PM2.5, 2014
 ```{r}
-#asthma_PM =  %>% #use TBD joined dataframe
-#ggplot(aes(x = borough, y = mean_mcg_per_cubic_meter, group = 1)) + geom_histogram(stat = "identity")
-#asthma_PM
+asthma_PM = joined %>% 
+  ggplot(aes(x = PM_mean, y = asthma_ER_percent_rate)) + geom_line()
+asthma_PM
 ```
 
 # Questions:
 
 What to do about age-adjusted heart attack admissions but not age-adjusted asthma admissions?
+
+Should we include data from many years? We definitely need more data points! 
