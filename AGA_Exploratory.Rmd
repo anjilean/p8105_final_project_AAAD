@@ -3,8 +3,6 @@ title: "Data Exploration, Amelia Grant-Alfieri"
 output: html_document
 ---
 
-##
-
 ```{r}
 library(tidyverse)
 library(purrr)
@@ -16,14 +14,89 @@ library(stringr)
 library(dplyr)
 library(ggplot2)
 getwd()
-
-medicaid_chronic_ER_county_12 = read_csv("./Medicaid_Chronic_Conditions__Inpatient_Admissions_and_ER_Visits_by_County__Begin_2012.csv")
-
-medicaid_chronic_ER_zip_12 = read_csv("./Medicaid_Chronic_Conditions__Inpatient_Admissions_and_ER_Visits_by_Zip_Code__Begin_2012.csv")
-
-medicaid_PDI_pediatric_county_11 = read_csv("Medicaid_Inpatient_Prev_Qual_Indicators_PDI_Ped_Discharge_by_Patient_County__Begin_2011.csv")
-
-PM_neighb = read_csv("PM2.5 by Neighborhood.csv")
-
-PM_city = read_csv("PM2.5 citywide.csv")
 ```
+
+##Create PM2.5 Dataset, 2014
+```{r}
+PM = read_csv("PM2.5_2014.csv") %>%
+  janitor::clean_names() %>%
+  filter(borough == "Bronx" | borough == "Brooklyn" | borough == "Queens" | borough == "Staten Island" | borough == "Manhattan") %>%
+  filter(geo_type_name == "Borough") %>%
+  select(-geo_type_name, -geography, -geography_id, -indicator_name)
+```
+
+##Create Children's Asthma Hospitalization Rate Dataset, 2012-14
+```{r}
+asthma_hosp_child = read_csv("asthma_hosp_rate_10000_age0-17.csv") %>%
+  janitor::clean_names() %>%
+  filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percent_rate, data_years)
+```
+
+##Create Asthma ER Admissions Rate Dataset, 2014
+```{r}
+asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percentage_rate_ratio, data_years)
+```
+
+##Create Age-Adjusted Cardiovascular Hospitalization Rates Dataset, 2012-14
+```{r}
+aa_CVD_hosp = read_csv("age_adj_CVD_hosp_rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percent_rate, data_years)
+```
+
+##Create Age-Adjusted Heart Attack Hospitalization Rates Dataset, 2014
+```{r}
+aa_heart_attack_hosp = read_csv("age_adj_heart_attack_hosp_rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percentage_rate_ratio, data_years)
+```
+
+##Plot Heart Attack Hosp per Borough
+```{r}
+heart_attack = aa_heart_attack_hosp %>%
+  ggplot(aes(x = county_name, y = percentage_rate_ratio, group = 1)) + geom_histogram(stat = "identity")
+heart_attack
+```
+
+##Plot Asthma ER Admissions per Borough
+```{r}
+asthma = asthma_ER %>%
+    ggplot(aes(x = county_name, y = percentage_rate_ratio, group = 1)) + geom_histogram(stat = "identity") 
+asthma 
+```
+
+##Plot PM 2.5 per Borough
+```{r}
+PM = PM %>%
+ggplot(aes(x = borough, y = mean_mcg_per_cubic_meter, group = 1)) + geom_histogram(stat = "identity")
+PM
+```
+
+##Join heart attack, asthma, and PM datasets
+```{r}
+
+```
+
+##Plot Heart Attack & PM2.5, 2014
+```{r}
+heart_attack_PM = joined %>%
+ggplot(aes(x = borough, y = mean_mcg_per_cubic_meter, group = 1)) + geom_histogram(stat = "identity")
+heart_attack_PM
+```
+
+##Plot Asthma & PM2.5, 2014
+```{r}
+asthma_PM = joined %>%
+ggplot(aes(x = borough, y = mean_mcg_per_cubic_meter, group = 1)) + geom_histogram(stat = "identity")
+asthma_PM
+```
+
+#Questions:
+
+What to do about age-adjusted heart attack admissions but not age-adjusted asthma admissions?
