@@ -1,0 +1,29 @@
+---
+title: "Data Exploration, Amelia Grant-Alfieri"
+output: html_document
+---
+
+##
+
+```{r}
+library(tidyverse)
+library(purrr)
+library(broom)
+library(rvest)
+library(httr)
+library(tidyr)
+library(stringr)
+library(dplyr)
+library(ggplot2)
+getwd()
+
+medicaid_chronic_ER_county_12 = read_csv("./Medicaid_Chronic_Conditions__Inpatient_Admissions_and_ER_Visits_by_County__Begin_2012.csv")
+
+medicaid_chronic_ER_zip_12 = read_csv("./Medicaid_Chronic_Conditions__Inpatient_Admissions_and_ER_Visits_by_Zip_Code__Begin_2012.csv")
+
+medicaid_PDI_pediatric_county_11 = read_csv("Medicaid_Inpatient_Prev_Qual_Indicators_PDI_Ped_Discharge_by_Patient_County__Begin_2011.csv")
+
+PM_neighb = read_csv("PM2.5 by Neighborhood.csv")
+
+PM_city = read_csv("PM2.5 citywide.csv")
+```

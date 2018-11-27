@@ -1,0 +1,18 @@
+,,,,,Fine Particulate Matter (PM 2.5) : Summarize
+Topic: Environment
+Subtopic: Air Quality
+Indicator Name: Fine Particulate Matter (PM 2.5)
+Indicator Description: 
+
+Year,GeoTypeName,Borough,Geography,Geography ID,Indicator Name,98th Percentile (µg/m3),Days above Regulatory Standard (number of days),Annual Average (mcg per cubic meter),Sensitive Groups (number of days),Notes 98th Percentile,Notes Days above Regulatory Standard,Notes Annual Average,Notes Sensitive Groups,
+2017,Citywide,New York City, New York City,1,Fine Particulate Matter (PM 2.5),,0,,0,,,,,
+
+Name:Fine Particulate Matter (PM 2.5),Measure:98th Percentile (µg/m3),How Calculated:The 98th percentile 24-hour value in micrograms per cubic meter. This value is higher than 98 percent of 24-hour values for the year.,Source(s):United States Environmental Pr,Year:2017,
+Name:Fine Particulate Matter (PM 2.5),Measure:Days above Regulatory Standard (number of days),How Calculated:Number of days in the year for which values were reported higher than the U.S. standard (35 ug/m3) in the geographic area.,Source(s):United States Environmental Pr,Year:2017,
+Name:Fine Particulate Matter (PM 2.5),Measure:Annual Average (mcg per cubic meter),How Calculated:This measure is calculated by averaging PM2.5 levels at each monitor weighted by the number of samples in each quarter then taking the weighted average of all monitors in the geographic area.,Source(s):United States Environmental Pr,Year:2017,
+Name:Fine Particulate Matter (PM 2.5),Measure:Sensitive Groups (number of days),How Calculated:The 98th percentile 24-hour value in micrograms per cubic meter. This value is higher than 98 percent of 24-hour values for the year.,Source(s):United States Environmental Pr,Year:2017,
+
+NYC Department of Health and Mental Hygiene
+Environment & Health Data Portal
+More information can be found at: http://nyc.gov/health/tracking
+Accessed 11/26/2018
