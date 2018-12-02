@@ -61,7 +61,8 @@ aa_heart_attack_hosp = read_csv("age_adj_heart_attack_hosp_rate_10000.csv") %>%
   #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
   select(county_name, percentage_rate_ratio, data_years) %>%
   rename(aa_hattack_percent_rate = percentage_rate_ratio,
-         aa_hattack_years = data_years)
+         aa_hattack_years = data_years) %>%
+  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") #to deselect regions that are not included in the heart attack dataset
 ```
 
 ### Create Asthma ER Admissions Rate Dataset, 2014
@@ -71,7 +72,9 @@ asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
   #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
   select(county_name, percentage_rate_ratio, data_years) %>%
   rename(asthma_ER_percent_rate = percentage_rate_ratio, 
-         asthma_ER_years = data_years)
+         asthma_ER_years = data_years) %>%
+  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") #to deselect regions that are not included in the heart attack dataset
+  
 ```
 
 ### Create PM2.5 Dataset, 2000-2014
@@ -147,16 +150,21 @@ PM_plot_14
 ### Plot Heart Attack Hospital Visits per County, 2014
 ```{r}
 heart_plot_14 = aa_heart_attack_hosp %>%
-  ggplot(aes(x = county_name, y = aa_hattack_percent_rate, group = 1)) + geom_histogram(stat = "identity")
-heart_plot_14
+  ggplot(aes(x = reorder(county_name, -aa_hattack_percent_rate), y = aa_hattack_percent_rate, group = 1)) + geom_histogram(stat = "identity") + theme(axis.text.x = element_text(angle = 90)) + labs(x = "County", y = "Heart Attack Hospital Visit Rate (per 10,000)", title = "Heart Attack Hospital Visit Rate per 10,000 by County in New York State, 2014")
+heart_plot_14 
 ```
 
 ### Plot Asthma ER Admissions per County, 2014
 ```{r}
 asthma_plot_14 = asthma_ER %>%
-    ggplot(aes(x = county_name, y = asthma_ER_percent_rate, group = 1)) + geom_histogram(stat = "identity") 
+    ggplot(aes(x = reorder(county_name, -asthma_ER_percent_rate), y = asthma_ER_percent_rate, group = 1)) + geom_histogram(stat = "identity") + theme(axis.text.x = element_text(angle = 90)) + labs(x = "County", y = "Asthma ER Admission Rate (per 10,000)", title = "Asthma Emergency Room (ER) Admission Rate (per 10,000) by County in New York State, 2014")
 asthma_plot_14 
 ```
+
+
+
+
+
 
 ### Join heart attack, asthma, and PM datasets
 redo join by county. not all counties overlap in all datasets!!!
