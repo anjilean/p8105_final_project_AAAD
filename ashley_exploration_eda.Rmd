@@ -64,9 +64,7 @@ Asthma Emergency Department Visit Rate per 10,000 by County in NYC, 2014
 asthma_ed_data = read_csv(file = "./data_AK/PA__Asthma_Emergency_Department_Visit_Rate_Per_10_000_by_County__Latest_Year.csv") %>% 
   janitor::clean_names() %>%
   select(county_name, event_count_rate, average_number_of_denominator_rate, 
-         percentage_rate_ratio) %>% 
-  filter(county_name %in% c("Bronx", "Kings", "New York", "Queens", 
-                            "Richmond"))
+         percentage_rate_ratio)
 ```
 
 Age-Adjusted Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
@@ -78,9 +76,7 @@ cvd_data = read_csv(file = "./data_AK/Community_Health__Age-adjusted_Cardiovascu
   janitor::clean_names() %>%
   filter(health_topic %in% "Cardiovascular Disease Indicators") %>% 
   select(county_name, event_count, average_number_of_denominator, 
-         percent_rate) %>% 
-  filter(county_name %in% c("Bronx", "Kings", "New York", "Queens", 
-                            "Richmond"))
+         percent_rate)
 ```
 
 Note: Richmond County = Staten Island, Kings County = Brooklyn. We can rename from county to boroughs.
@@ -103,12 +99,11 @@ asthma_ed_data %>%
 
 Asthma emergency department visits are highest in Bronx (substantially higher than the next highest county which is New York), while Richmond County (Staten Island) reports the fewest asthma emergency department visits.  
 
-
-
 Age-Adjusted CVD Hospitalization Rate in NYC, 2012 - 2014 
-
-```{r cvd_bar}
+```{r cvd_bar_nyc}
 cvd_data %>%
+  filter(county_name %in% c("Bronx", "Kings", "New York", "Queens", 
+                            "Richmond")) %>% 
   ggplot(aes(x = county_name, y = percent_rate)) +
   labs(
     title = "CVD Hospitalization Rate",
@@ -117,6 +112,22 @@ cvd_data %>%
   geom_histogram(stat = "identity", aes(fill = county_name)) + 
   viridis::scale_fill_viridis(name = "County", discrete = TRUE) +
   theme_bw()
+```
+
+
+Age-Adjusted CVD Hospitalization Rate in NY State, 2012 - 2014 
+
+```{r cvd_bar_nys}
+cvd_data %>%
+  ggplot(aes(x = reorder(county_name, -percent_rate), y = percent_rate)) +
+  labs(
+    title = "CVD Hospitalization Rate in NY State, 2012 - 2014",
+    x = "County",
+    y = "Hospitalizations per 10,000") +
+  geom_histogram(stat = "identity") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90), legend.position = "none")
+
 ```
 
 CVD hospitalizations are highest in Bronx, as well. However, the discrepency between the rate of CVD hospitalization in Bronx and Kings County (Brooklyn, which has the second highest rate) is not as extreme as it was for asthma emergency department visits. New York County reports the lowest rates of CVD hospitalization.  

@@ -51,9 +51,7 @@ Asthma Emergency Department Visit Rate per 10,000 by County in NYC, 2014
 asthma_ed_data = read_csv(file = "./data_AK/PA__Asthma_Emergency_Department_Visit_Rate_Per_10_000_by_County__Latest_Year.csv") %>% 
   janitor::clean_names() %>%
   select(county_name, event_count_rate, average_number_of_denominator_rate, 
-         percentage_rate_ratio) %>% 
-  filter(county_name %in% c("Bronx", "Kings", "New York", "Queens", 
-                            "Richmond"))
+         percentage_rate_ratio)
 ```
 
 Age-Adjusted Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
@@ -65,9 +63,7 @@ cvd_data = read_csv(file = "./data_AK/Community_Health__Age-adjusted_Cardiovascu
   janitor::clean_names() %>%
   filter(health_topic %in% "Cardiovascular Disease Indicators") %>% 
   select(county_name, event_count, average_number_of_denominator, 
-         percent_rate) %>% 
-  filter(county_name %in% c("Bronx", "Kings", "New York", "Queens", 
-                            "Richmond"))
+         percent_rate)
 ```
 
 Note: Richmond County = Staten Island, Kings County = Brooklyn. We can rename from county to boroughs.
@@ -89,6 +85,8 @@ asthma_ed_data %>%
 ```
 
     ## Warning: Ignoring unknown parameters: binwidth, bins, pad
+
+    ## Warning: Removed 1 rows containing missing values (position_stack).
 
 ![](ashley_exploration_eda_files/figure-markdown_github/asthma_ed_bar-1.png)
 
