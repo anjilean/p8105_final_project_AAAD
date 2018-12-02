@@ -1,0 +1,18 @@
+---
+title: "Explore"
+author: "Divya Bisht"
+date: "12/2/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## To be copy/pasted into the Explore tab on the Ashley's website project. 
+
+
+
+
+
+
