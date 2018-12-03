@@ -3,7 +3,72 @@ Exploration for Website (Clean Up)
 Ashley Kang
 12/3/2018
 
-### PM2.5 Datasets:
+### Datasets
+
+Asthma Datasets:
+----------------
+
+-   Children's Asthma Hospitalization Rate for NYC, 2012-14
+
+``` r
+asthma_hosp_child_nyc = read_csv("./data_website/asthma_hospitalization_rate_10000_children.csv") %>%
+  janitor::clean_names() %>%
+  filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percent_rate, data_years) %>%
+  rename(asthma_hosp_percent_rate = percent_rate, 
+         asthma_hosp_years = data_years)
+```
+
+-   Asthma Hospitalization Rate for NYC, 2012-2014
+
+``` r
+asthma_hosp_nyc = read_csv("./data_website/asthma_ED_rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  select(county_name, percentage_rate_ratio, data_years) %>%
+  rename(asthma_hosp_percent_rate_ratio = percentage_rate_ratio, 
+         asthma_hosp_years = data_years)
+```
+
+-   Asthma ER Admissions Rate Dataset, 2014
+
+``` r
+asthma_ER_2014 = read_csv("./data_website/Asthma_ER_Rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percentage_rate_ratio, data_years) %>%
+  rename(asthma_ER_percent_rate = percentage_rate_ratio, 
+         asthma_ER_years = data_years) %>%
+  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") %>% #to remove non-county regions
+  rename(county = county_name)
+```
+
+CVD Datasets:
+-------------
+
+-   Age-Adjusted Cardiovascular Hospitalization Rates for NYC, 2012-14
+
+``` r
+CVD_hosp_NYC = read_csv("age_adj_CVD_hosp_rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  filter(health_topic == "Cardiovascular Disease Indicators") %>%
+  filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percent_rate, data_years) %>%
+  rename(aa_CVD_percent_rate = percent_rate, 
+         aa_CVD_years = data_years)
+```
+
+-   Age-Adjusted Cardiovascular Hospitalization Rates for NYS, 2012-2014
+
+``` r
+cvd_data_NYS = read_csv(file = "./data_website/Community_Health__Age-adjusted_Cardiovascular_Disease_Hospitalization_Rate_per_10_000_by_County_Map__Latest_Data.csv") %>% 
+  janitor::clean_names() %>%
+  filter(health_topic %in% "Cardiovascular Disease Indicators") %>% 
+  select(county_name, event_count, average_number_of_denominator, 
+         percent_rate)
+```
+
+PM2.5 Datasets:
+---------------
 
 -   PM2.5 Dataset, 2000-2014
 
@@ -27,4 +92,52 @@ PM_2014 = read_csv("./data_website/PM2.5_2014.csv") %>%
          PM_ninety_percentile = x90th_percentile_mcg_per_cubic_meter, 
          PM_year = year,
          county_name = borough)
+```
+
+Ozone Datasets:
+---------------
+
+-   Ozone for 2000-2014
+
+``` r
+ozone_county_NYS = read_csv("./data_website/ozone_county_NYS.csv") %>%
+  janitor::clean_names() %>%
+  select(county_name, year, output, measure) %>%
+  separate(county_name, into = c("county", "delete", sep = " ")) %>% 
+  select(-delete) %>%
+  mutate(county = recode(county, `New` = "New York")) %>% 
+  select(county, year, output, measure)
+```
+
+Joining CVD, asthma, and PM datasets:
+-------------------------------------
+
+``` r
+# Filtering counties from asthma dataset
+to_join_asthma_14 = asthma_ER_2014 %>%
+  filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex")
+
+# Filtering counties from CVD dataset
+to_join_cvd_14 = cvd_data_NYS %>%
+  rename("county" = county_name, "cvd_percent_rate" = percent_rate) %>% 
+  filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex")
+  
+# Filtering counties from ozone dataset
+to_join_ozone_14 = ozone_county_NYS %>%
+  filter(year == "2014") %>%
+  filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex") %>%
+  rename(ozone_reading = output, ozone_unit = measure)
+
+# Filtering 2014 from PM dataset
+to_join_PM_14 = PM_county_NYS %>%
+  filter(year == "2014") %>%
+  rename(PM_reading = output, PM_unit = measure)
+
+# Creating joined dataset
+PM_ozone_joined = inner_join(to_join_ozone_14, to_join_PM_14, by = "county")
+
+cvd_asthma_joined = inner_join(to_join_cvd_14, to_join_asthma_14, by = "county")
+
+joined = inner_join(cvd_asthma_joined, PM_ozone_joined, by = "county") %>%
+  select(county, cvd_percent_rate, asthma_ER_percent_rate, ozone_reading, ozone_unit, PM_reading, PM_unit)
 ```
