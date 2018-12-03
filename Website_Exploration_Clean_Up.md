@@ -34,14 +34,12 @@ asthma_hosp_nyc = read_csv("./data_website/asthma_ED_rate_10000.csv") %>%
 -   Asthma ER Admissions Rate Dataset, 2014
 
 ``` r
-asthma_ER_2014 = read_csv("./data_website/Asthma_ER_Rate_10000.csv") %>%
+asthma_hosp_nys = read_csv("./data_website/asthma_ED_rate_10000.csv") %>%
   janitor::clean_names() %>%
-  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
   select(county_name, percentage_rate_ratio, data_years) %>%
-  rename(asthma_ER_percent_rate = percentage_rate_ratio, 
-         asthma_ER_years = data_years) %>%
-  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") %>% #to remove non-county regions
-  rename(county = county_name)
+  filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
+  rename(asthma_hosp_percent_rate_ratio = percentage_rate_ratio, 
+         asthma_hosp_years = data_years)
 ```
 
 CVD Datasets:
@@ -116,32 +114,37 @@ Joining CVD, asthma, and PM datasets:
 
 ``` r
 # Filtering counties from asthma dataset
-to_join_asthma_14 = asthma_ER_2014 %>%
-  filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex")
+to_join_asthma_14 = asthma_hosp_nys %>% 
+  rename("county" = county_name)
+  #asthma_ER_2014 %>% 
+#%>%
+  #filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex")
 
 # Filtering counties from CVD dataset
 to_join_cvd_14 = cvd_data_NYS %>%
-  rename("county" = county_name, "cvd_percent_rate" = percent_rate) %>% 
-  filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex")
+  rename("county" = county_name, "cvd_percent_rate" = percent_rate) #%>% 
+  #filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex")
   
 # Filtering counties from ozone dataset
 to_join_ozone_14 = ozone_county_NYS %>%
-  filter(year == "2014") %>%
-  filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex") %>%
+  filter(year == "2014", measure == "Person Days") %>%
+  #filter(county == "Bronx" | county == "New York" | county == "Kings" | county == "Erie" | county == "Richmond" | county == "Chautauqua" | county == "Queens" | county == "Suffolk" | county == "Albany" | county == "Monroe" | county == "Orange" | county == "Onondaga" | county == "Steuben" | county == "Essex") %>%
+  select(county, output, measure) %>% 
   rename(ozone_reading = output, ozone_unit = measure)
 
 # Filtering 2014 from PM dataset
 to_join_PM_14 = PM_county_NYS %>%
-  filter(year == "2014") %>%
+  filter(year == "2014", measure == "Micrograms/cubic meter (LC)") %>%
+  select(county, output, measure) %>% 
   rename(PM_reading = output, PM_unit = measure)
 
 # Creating joined dataset
-PM_ozone_joined = inner_join(to_join_ozone_14, to_join_PM_14, by = "county")
+PM_ozone_joined = full_join(to_join_ozone_14, to_join_PM_14, by = "county")
 
-cvd_asthma_joined = inner_join(to_join_cvd_14, to_join_asthma_14, by = "county")
+cvd_asthma_joined = left_join(to_join_cvd_14, to_join_asthma_14, by = "county")
 
-joined = inner_join(cvd_asthma_joined, PM_ozone_joined, by = "county") %>%
-  select(county, cvd_percent_rate, asthma_ER_percent_rate, ozone_reading, ozone_unit, PM_reading, PM_unit)
+joined = left_join(cvd_asthma_joined, PM_ozone_joined, by = "county") %>%
+  select(county, cvd_percent_rate, asthma_hosp_percent_rate_ratio, ozone_reading, ozone_unit, PM_reading, PM_unit)
 ```
 
 ### Plots
@@ -166,7 +169,7 @@ asthma_hosp_child_nyc %>%
 
     ## Warning: Ignoring unknown parameters: binwidth, bins, pad
 
-![](Website_Exploration_Clean_Up_files/figure-markdown_github/unnamed-chunk-1-1.png)
+![](Website_Exploration_Clean_Up_files/figure-markdown_github/asthma_child_bar-1.png)
 
 -   Asthma Emergency Department Visits in NYC, 2014
 
@@ -190,9 +193,9 @@ asthma_hosp_nyc %>%
 -   Asthma ER Admissions per County, 2014
 
 ``` r
-asthma_ER_2014 %>%
-    ggplot(aes(x = reorder(county, -asthma_ER_percent_rate), 
-               y = asthma_ER_percent_rate, group = 1)) + 
+asthma_hosp_nys %>%
+    ggplot(aes(x = reorder(county_name, -asthma_hosp_percent_rate_ratio), 
+               y = asthma_hosp_percent_rate_ratio, group = 1)) + 
   geom_histogram(stat = "identity") + 
   theme(axis.text.x = element_text(angle = 90)) + 
   labs(x = "County", y = "Asthma ER Admission Rate (per 10,000)", 
@@ -346,9 +349,8 @@ ozone_county_NYS %>%
 
 ``` r
 joined %>% 
-  filter(PM_unit == "Micrograms/cubic meter (LC)") %>%
   group_by(county) %>%
-  ggplot(aes(x = PM_reading, y = asthma_ER_percent_rate, color = county)) + 
+  ggplot(aes(x = PM_reading, y = asthma_hosp_percent_rate_ratio, color = county)) + 
   geom_point() + 
   labs(x = "Ambient PM2.5 (ug/m3)", 
        y = "Asthma ER Admission Rate (per 10,000)", 
@@ -356,13 +358,14 @@ joined %>%
   theme_bw()
 ```
 
+    ## Warning: Removed 48 rows containing missing values (geom_point).
+
 ![](Website_Exploration_Clean_Up_files/figure-markdown_github/asthma_pm-1.png)
 
 -   CVD & PM2.5, 2014
 
 ``` r
 joined %>%  
-  filter(PM_unit == "Micrograms/cubic meter (LC)") %>%
   group_by(county) %>%
   ggplot(aes(x = PM_reading, y = cvd_percent_rate, color = county)) + 
   geom_point() + 
@@ -375,15 +378,16 @@ joined %>%
   theme_bw()
 ```
 
+    ## Warning: Removed 48 rows containing missing values (geom_point).
+
 ![](Website_Exploration_Clean_Up_files/figure-markdown_github/cvd_pm-1.png)
 
 -   Asthma & Ozone, 2014
 
 ``` r
 joined %>% 
-  filter(ozone_unit == "Person Days") %>%
   group_by(county) %>%
-  ggplot(aes(x = ozone_reading, y = asthma_ER_percent_rate, color = county)) + 
+  ggplot(aes(x = ozone_reading, y = asthma_hosp_percent_rate_ratio, color = county)) + 
   geom_point() + 
   labs(x = "Ozone (person days)",
        y = "Asthma ER Admission Rate (per 10,000)", 
@@ -391,13 +395,14 @@ joined %>%
   theme_bw()
 ```
 
+    ## Warning: Removed 37 rows containing missing values (geom_point).
+
 ![](Website_Exploration_Clean_Up_files/figure-markdown_github/asthma_ozone-1.png)
 
 -   CVD & Ozone, 2014
 
 ``` r
 joined %>%  
-  filter(ozone_unit == "Person Days") %>%
   group_by(county) %>%
   ggplot(aes(x = ozone_reading, y = cvd_percent_rate, color = county)) +
   geom_point() + 
@@ -406,5 +411,7 @@ joined %>%
        title = "Association between Ozone and CVD Hospital Visits in New York State, 2014") +
   theme_bw()
 ```
+
+    ## Warning: Removed 36 rows containing missing values (geom_point).
 
 ![](Website_Exploration_Clean_Up_files/figure-markdown_github/cvd_ozone-1.png)
