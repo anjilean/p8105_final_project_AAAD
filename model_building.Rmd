@@ -1,0 +1,96 @@
+---
+title: "Model Building"
+author: "Anjile An"
+date: 'December 4, 2018'
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Load and clean data
+
+To build our model, we are looking at New York State asthma hospitalizations data, CVD hospitalizations data, and PM2.5 (air quality) data. In our exploratory analysis, we found that the trends of hospitalizations and PM2.5 do not trend together, and a potential confounder to that may be the number of hospitals in each county. 
+
+```{r asthma_data}
+# Asthma emergency department visit rate per 10,000 by county
+# Source: NYSDOH Health Data NY
+# remove "regions"
+
+asthma_ed = read_csv(file = "./data_AA/asthma_ED_rate_10000.csv") %>% 
+  janitor::clean_names() %>%
+  select(county_name, event_count_rate, percentage_rate_ratio, data_years) %>%
+  filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
+  rename(asthma_hosp_percent_rate_ratio = percentage_rate_ratio, 
+         asthma_hosp_years = data_years,
+         county = county_name)
+```
+
+```{r cvd_data}
+# Age-adjusted cardiovascular disease hospitalization rate per 10,000 by county
+# Source: NYSDOH Health Data NY
+# remove "regions"
+
+cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  filter(health_topic == "Cardiovascular Disease Indicators") %>%
+  filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
+  select(county_name, event_count, percent_rate, data_years) %>%
+  rename(county = county_name)
+```
+
+```{r pm25_data}
+# PM 2.5 annual summary data by county
+# Source: US EPA AQS, 2014
+
+nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>% 
+  janitor::clean_names() %>%
+  filter(state == "New York") %>%
+  select(county, good_days:median_aqi)
+```
+
+```{r hosp_data}
+# NYS county population and number of hospitals
+# Source: NYS HealthData
+
+num_hosp = read_csv(file = "./data_AA/nys_county_hospitals.csv") %>% 
+  janitor::clean_names() %>%
+  rename(county = geography) %>%
+  separate(county, into = c("county", "delete")) %>% 
+  select(-delete) 
+```
+
+
+**Checks before regression analysis:**
+
+```{r reg_checks}
+# Check for missing data
+
+sum(is.na(asthma_ed)) 
+sum(is.na(cvd_hosp))
+sum(is.na(nys_pm25))
+sum(is.na(num_hosp))
+```
+
+There are 2 pieces of missing data in `asthma_ed` file under Hamilton county, which could be a data entry error or due to the fact that Hamilton county has a very small population (4703) and none were hospitalized for asthma.
+
+Visual checks were done in previous exploratory analysis. 
+
+## Regression model
+
+We will test two models each for asthma hospitalizations and CVD hospitalizations - the crude model and the adjusted model (including number of hospitals as a covariate).
+
+Crude model:
+
+> asthma = pm25 
+> cvd = pm25
+
+Adjusted model:
+
+> asthma = pm25 + num_hosp
+> cvd = pm25 + num_hosp
+
+
+
