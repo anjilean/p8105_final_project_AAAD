@@ -18,23 +18,10 @@ asthma_ed = read_csv(file = "./data_AA/asthma_ED_rate_10000.csv") %>%
   select(county_name, event_count_rate, percentage_rate_ratio, data_years) %>%
   filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
   rename(asthma_hosp_percent_rate_ratio = percentage_rate_ratio, 
+         asthma_event_count = event_count_rate,
          asthma_hosp_years = data_years,
          county = county_name)
 ```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   `Priority Area Number` = col_integer(),
-    ##   `Focus Area Number` = col_integer(),
-    ##   `Event Count/Rate` = col_integer(),
-    ##   `Average Number of Denominator/Rate` = col_integer(),
-    ##   `Percentage/Rate/Ratio` = col_double(),
-    ##   `2018 Objective` = col_double(),
-    ##   `Data Years` = col_integer()
-    ## )
-
-    ## See spec(...) for full column specifications.
 
 ``` r
 # Age-adjusted cardiovascular disease hospitalization rate per 10,000 by county
@@ -46,29 +33,11 @@ cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000
   filter(health_topic == "Cardiovascular Disease Indicators") %>%
   filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
   select(county_name, event_count, percent_rate, data_years) %>%
-  rename(county = county_name)
+  rename(county = county_name,
+         cvd_event_count = event_count,
+         cvd_percent_rate = percent_rate,
+         cvd_data_years = data_years)
 ```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   `County Name` = col_character(),
-    ##   `Health Topic Number` = col_integer(),
-    ##   `Health Topic` = col_character(),
-    ##   `Indicator Number` = col_character(),
-    ##   Indicator = col_character(),
-    ##   `Event Count` = col_integer(),
-    ##   `Average Number of Denominator` = col_integer(),
-    ##   `Measure Unit` = col_character(),
-    ##   `Percent/Rate` = col_double(),
-    ##   `Lower Limit of 95% CI` = col_character(),
-    ##   `Upper Limit of 95% CI` = col_character(),
-    ##   `Data Comments` = col_character(),
-    ##   Quartile = col_character(),
-    ##   `Data Years` = col_character(),
-    ##   `Data Source` = col_character(),
-    ##   `Mapping Distribution` = col_integer(),
-    ##   Location = col_character()
-    ## )
 
 ``` r
 # PM 2.5 annual summary data by county
@@ -77,40 +46,37 @@ cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000
 nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>% 
   janitor::clean_names() %>%
   filter(state == "New York") %>%
-  select(county, good_days:median_aqi)
+  select(county, good_days:median_aqi) %>%
+  rename(airq_good_days = good_days,
+         airq_moderate_days = moderate_days,
+         airq_unhealthy_for_sensitive_groups_days = unhealthy_for_sensitive_groups_days,
+         airq_unhealthy_days = unhealthy_days,
+         airq_very_unhealthy_days = very_unhealthy_days,
+         airq_hazardous_days = hazardous_days)
+
+# change NAs to 0 for ease of regression analysis
+nys_pm25[is.na(nys_pm25)] = 0
 ```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_integer(),
-    ##   State = col_character(),
-    ##   County = col_character()
-    ## )
-
-    ## See spec(...) for full column specifications.
 
 ``` r
 # NYS county population and number of hospitals
-# Source: NYS HealthData
+# Source: NYS HealthData, 2014
 
-num_hosp = read_csv(file = "./data_AA/nys_county_hospitals.csv") %>% 
+num_hosp = read_csv(file = "./data_AA/nys_county_hospitals_2014.csv") %>% 
   janitor::clean_names() %>%
   rename(county = geography) %>%
-  separate(county, into = c("county", "delete")) %>% 
-  select(-delete) 
+  mutate(county = str_replace(county, " County", "")) %>%
+  select(county, population, number_of_hospitals)
 ```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   `FIPS Code` = col_integer(),
-    ##   Geography = col_character(),
-    ##   Year = col_integer(),
-    ##   `Program Type` = col_character(),
-    ##   Population = col_integer(),
-    ##   `Number of hospitals` = col_integer()
-    ## )
+Joining the data:
 
-    ## Warning: Expected 2 pieces. Additional pieces discarded in 2 rows [31, 45].
+``` r
+asthma_cvd_join = full_join(asthma_ed, cvd_hosp, by = "county")
+pm25_numhosp_join = full_join(nys_pm25, num_hosp, by = "county")
+
+nys_joined = left_join(asthma_cvd_join, pm25_numhosp_join, by = "county")
+```
 
 **Checks before regression analysis:**
 
@@ -118,27 +84,14 @@ num_hosp = read_csv(file = "./data_AA/nys_county_hospitals.csv") %>%
 # Check for missing data
 
 sum(is.na(asthma_ed)) 
-```
-
-    ## [1] 2
-
-``` r
+## [1] 2
 sum(is.na(cvd_hosp))
-```
-
-    ## [1] 0
-
-``` r
+## [1] 0
 sum(is.na(nys_pm25))
-```
-
-    ## [1] 0
-
-``` r
+## [1] 0
 sum(is.na(num_hosp))
+## [1] 0
 ```
-
-    ## [1] 0
 
 There are 2 pieces of missing data in `asthma_ed` file under Hamilton county, which could be a data entry error or due to the fact that Hamilton county has a very small population (4703) and none were hospitalized for asthma.
 
@@ -156,3 +109,63 @@ Crude model:
 Adjusted model:
 
 > asthma = pm25 + num\_hosp cvd = pm25 + num\_hosp
+
+Interaction is not included, as it makes interpretation difficult.
+
+#### Asthma model
+
+``` r
+# Crude asthma model
+crude_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days, data = nys_joined)
+summary(crude_asthma_model)
+
+# Adjusted asthma model
+adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+summary(adj_asthma_model)
+```
+
+#### CVD model
+
+``` r
+# Crude cvd model
+crude_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days, data = nys_joined)
+summary(crude_cvd_model)
+
+# Adjusted cvd model
+adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+summary(adj_cvd_model)
+```
+
+Cross validation
+----------------
+
+#### Asthma model
+
+``` r
+set.seed(1)
+cv_asthma = crossv_mc(nys_joined, 100) 
+
+# Fit candidate models
+options(warn = -1) # suppress printing all the warnings
+cv_asthma = cv_asthma %>%
+  mutate(crude_asthma_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days, data = .x)),
+         adj_asthma_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = .x))) %>%
+  mutate(rmse_crude = map2_dbl(crude_asthma_mod, test, ~rmse(model = .x, data = .y)),
+         rmse_adj = map2_dbl(adj_asthma_mod, test, ~rmse(model = .x, data = .y)))
+
+# Plot distribution of RMSE
+cv_asthma %>% 
+  select(starts_with("rmse")) %>% 
+  gather(key = model, value = rmse) %>% 
+  mutate(model = str_replace(model, "rmse_", ""),
+         model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + 
+  labs(
+    title = "Violin plots of RMSE, Asthma",
+    y = "RMSE",
+    x = "Model"
+  ) +
+  geom_violin()
+```
+
+<img src="model_building_files/figure-markdown_github/asthma_cv-1.png" width="90%" />
