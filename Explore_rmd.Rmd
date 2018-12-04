@@ -14,85 +14,16 @@ library(tidyverse)
 
 Early exploration was done with data from New York City counties and NY state-wide counties 
 
-Looking at all age groups instead of stratifying by age because trends of exposure were similar across age groups
-
-(Insert: 
-- Anjile's asthma hospitalizations by NYC borough - FIND THE DATASET 
-- Ashley's cariovascular FIND the dataset (ageadjusted_cvd_hospitalizations) NYC
-- Amelia PM2.5 over time (to show decrease over time)
-- Amelia NY State hospitalizations-asthma and cvd (HAVE TO REPLACE HEART ATTACK WITH CVD)
-)
-
-
-#Things I have so far: 
--CVD hospitalization in NYC by county (Ashley)
--CVD hospitalization in NY State 2012-2014 (Ashley)
--Asthma ER visits in NY state (by county) (Amelia)
--PM2.5 Dataset, 2000-2014 (Amelia)
+Looking at all age groups instead of stratifying by age because trends of exposure were similar across age groups. 
 
 
 
 There was limited data available for annual PM2.5 by NYC counies, so NY state-wide plots were selected to demonstrate the relationship between PM2.5 and hospitalizations.  
 
 
+Over 2000-2014, levels of PM2.5 across all counties in New York State have steadily decreased. 
 
-### Create PM2.5 Dataset, 2014
-```{r message=FALSE, output=FALSE}
-PM = read_csv("PM2.5_2014.csv") %>%
-  janitor::clean_names() %>%
-  #filter(borough == "Bronx" | borough == "Brooklyn" | borough == "Queens" | borough == "Staten Island" | borough == "Manhattan") %>%
-  #filter(geo_type_name == "Borough") %>%
-  #select(-geo_type_name, -geography, -geography_id, -indicator_name) %>%
-  rename(PM_mean = mean_mcg_per_cubic_meter, 
-         PM_tenth_percentile = x10th_percentile_mcg_per_cubic_meter,
-         PM_ninety_percentile = x90th_percentile_mcg_per_cubic_meter, 
-         PM_year = year,
-         county_name = borough) %>%
-  mutate(county_name = recode(county_name, "Brooklyn" = "Kings", "Staten Island" = "Richmond", "Manhattan" = "New York"))
-```
-
-
-
-### Create Age-Adjusted Cardiovascular Hospitalization Rates Dataset, 2012-14
-```{r message=FALSE, output=FALSE}
-aa_CVD_hosp = read_csv("age_adj_CVD_hosp_rate_10000.csv") %>%
-  janitor::clean_names() %>%
-  filter(health_topic == "Cardiovascular Disease Indicators") %>%
-  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percent_rate, data_years) %>%
-  rename(aa_CVD_percent_rate = percent_rate, 
-         aa_CVD_years = data_years)
-```
-
-### Create Age-Adjusted Heart Attack Hospitalization Rates Dataset, 2014
-
-```{r message=FALSE, output=FALSE}
-#NEED TO CHANGE THIS TO CVD HOSPITALIZATIONS, NOT HEART ATTACK
-aa_heart_attack_hosp = read_csv("age_adj_heart_attack_hosp_rate_10000.csv") %>%
-  janitor::clean_names() %>%
-  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percentage_rate_ratio, data_years) %>%
-  rename(aa_hattack_percent_rate = percentage_rate_ratio,
-         aa_hattack_years = data_years) %>%
-  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") %>% #to remove non-county regions
-  rename(county = county_name)
-```
-
-### Create Asthma ER Admissions Rate Dataset, 2014
-#Need this dataset
-```{r message=FALSE, output=FALSE}
-asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
-  janitor::clean_names() %>%
-  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
-  select(county_name, percentage_rate_ratio, data_years) %>%
-  rename(asthma_ER_percent_rate = percentage_rate_ratio, 
-         asthma_ER_years = data_years) %>%
-  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") %>% #to remove non-county regions
-  rename(county = county_name)
-```
-
-### Create PM2.5 Dataset, 2000-2014
-##this this dataset for the below
+### PM2.5 Dataset, 2000-2014
 ```{r message=FALSE, output=FALSE}
 PM_county_NYS = read_csv("PM2.5_county_NYS.csv") %>%
   janitor::clean_names() %>%
@@ -105,7 +36,6 @@ PM_county_NYS = read_csv("PM2.5_county_NYS.csv") %>%
 ```
 
 ### Plot PM2.5 (ug/m3) over time, 2000-2014 
-## THIS ONE!
 ```{r}
 PM_plot_conc_allyears = PM_county_NYS %>%
   filter(measure == "Micrograms/cubic meter (LC)") %>%
@@ -115,14 +45,25 @@ PM_plot_conc_allyears
 ```
 
 
+Next, we wanted to assess how PM2.5 exposure varied across counties in NY State (USE ANJILE'S exploratory) 
 
-### Plot Heart Attack Hospital Visits per County, 2014
-
-## Change to CVD hospital visits per country
 ```{r}
-heart_plot_14 = aa_heart_attack_hosp %>% ##NEED TO CHANGE THIS DATASET
-  ggplot(aes(x = reorder(county, -aa_hattack_percent_rate), y = aa_hattack_percent_rate, group = 1)) + geom_histogram(stat = "identity") + theme(axis.text.x = element_text(angle = 90)) + labs(x = "County", y = "Heart Attack Hospital Visit Rate (per 10,000)", title = "Heart Attack Hospital Visit Rate per 10,000 by County in New York State, 2014")
-heart_plot_14 
+
+```
+
+
+Literature shows that exposure to PM2.5 is associated with asthma and cardiovascular disease. Therefore, we wanted to assess hospitalization of asthma and CVD across counties. 
+
+### Asthma ER Admissions Rate Dataset, 2014
+```{r message=FALSE, output=FALSE}
+asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
+  select(county_name, percentage_rate_ratio, data_years) %>%
+  rename(asthma_ER_percent_rate = percentage_rate_ratio, 
+         asthma_ER_years = data_years) %>%
+  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") %>% #to remove non-county regions
+  rename(county = county_name)
 ```
 
 ### Plot Asthma ER Admissions per County, 2014
@@ -132,33 +73,8 @@ asthma_plot_14 = asthma_ER %>%
 asthma_plot_14 
 ```
 
-
-### Plot Heart Attack & PM2.5, 2014
-```{r}
-heart_PM_plot = joined %>%  
-  filter(PM_unit == "Micrograms/cubic meter (LC)") %>%
-  group_by(county) %>%
-  ggplot(aes(x = PM_reading, y = aa_hattack_percent_rate, color = county)) + geom_point() + labs(x = "", y = "", title = "by County in New York State, 2014") + labs(x = "Ambient PM2.5 (ug/m3)", y = "Heart Attack Hospital Visit Rate (per 10,000)", title = "Association between PM2.5 and Heart Attack Hospital Visits in New York State, 2014")
-heart_PM_plot
-```
-
-## Plot Asthma & PM2.5, 2014
-```{r}
-asthma_PM_plot = joined %>% 
-  filter(PM_unit == "Micrograms/cubic meter (LC)") %>%
-  group_by(county) %>%
-  ggplot(aes(x = PM_reading, y = asthma_ER_percent_rate, color = county)) + geom_point() + labs(x = "Ambient PM2.5 (ug/m3)", y = "Asthma ER Admission Rate (per 10,000)", title = "Association between PM2.5 and Asthma Emergency Room (ER) Admissions in New York State, 2014")
-asthma_PM_plot
-```
-
-
-
-
-ASHLEY'S CODE: 
-Age-Adjusted Cardiovascular Disease Hospitalization Rate per 10,000 by County in NYC, 2012-2014
-
+Looking at cardiovascular hospitalizations...
 * Data source: NYSDOH Health Data
-
 ```{r load_clean_cvd, message = FALSE}
 cvd_data = read_csv(file = "./data_AK/Community_Health__Age-adjusted_Cardiovascular_Disease_Hospitalization_Rate_per_10_000_by_County_Map__Latest_Data.csv") %>% 
   janitor::clean_names() %>%
@@ -167,30 +83,8 @@ cvd_data = read_csv(file = "./data_AK/Community_Health__Age-adjusted_Cardiovascu
          percent_rate)
 ```
 
-Note: Richmond County = Staten Island, Kings County = Brooklyn. We can rename from county to boroughs.
+### Age-Adjusted CVD Hospitalization Rate in NY State, 2012 - 2014 
 
-### Visualization of data
-
-
-Age-Adjusted CVD Hospitalization Rate in NYC, 2012 - 2014 
-THIS ONE!
-```{r cvd_bar_nyc}
-cvd_data %>%
-  filter(county_name %in% c("Bronx", "Kings", "New York", "Queens", 
-                            "Richmond")) %>% 
-  ggplot(aes(x = county_name, y = percent_rate)) +
-  labs(
-    title = "CVD Hospitalization Rate",
-    x = "County",
-    y = "Hospitalizations per 10,000") +
-  geom_histogram(stat = "identity", aes(fill = county_name)) + 
-  viridis::scale_fill_viridis(name = "County", discrete = TRUE) +
-  theme_bw()
-```
-
-
-Age-Adjusted CVD Hospitalization Rate in NY State, 2012 - 2014 
-THIS ONE!
 ```{r cvd_bar_nys}
 cvd_data %>%
   ggplot(aes(x = reorder(county_name, -percent_rate), y = percent_rate)) +
@@ -202,4 +96,6 @@ cvd_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90), legend.position = "none")
 ```
+
+
 
