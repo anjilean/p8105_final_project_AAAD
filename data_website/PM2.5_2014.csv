@@ -1,0 +1,75 @@
+Year,GeoTypeName,Borough,Geography,Geography ID,Indicator Name,Mean (mcg per cubic meter),10th Percentile (mcg per cubic meter),90th Percentile (mcg per cubic meter)
+Annual Average 2014,Citywide,New York City, New York City,1,Fine Particulate Matter (PM2.5),8.9,8,10.3
+Annual Average 2014,Borough,Bronx, Bronx,1,Fine Particulate Matter (PM2.5),9.3,8.5,10.2
+Annual Average 2014,Borough,Brooklyn, Brooklyn,2,Fine Particulate Matter (PM2.5),9.1,8.2,10.3
+Annual Average 2014,Borough,Manhattan, Manhattan,3,Fine Particulate Matter (PM2.5),10.8,9.4,13.1
+Annual Average 2014,Borough,Queens, Queens,4,Fine Particulate Matter (PM2.5),8.6,7.8,9.5
+Annual Average 2014,Borough,Staten Island, Staten Island,5,Fine Particulate Matter (PM2.5),8.4,8,9
+Annual Average 2014,Neighborhood (community district),Brooklyn, Bay Ridge and Dyker Heights (CD10),310,Fine Particulate Matter (PM2.5),8.8,8.4,9.6
+Annual Average 2014,Neighborhood (community district),Queens, Bayside and Little Neck (CD11),411,Fine Particulate Matter (PM2.5),8.3,7.9,8.9
+Annual Average 2014,Neighborhood (community district),Brooklyn, Bedford Stuyvesant (CD3),303,Fine Particulate Matter (PM2.5),9.3,8.8,9.9
+Annual Average 2014,Neighborhood (community district),Bronx, Belmont and East Tremont (CD6),206,Fine Particulate Matter (PM2.5),9.6,9,10.3
+Annual Average 2014,Neighborhood (community district),Brooklyn, Bensonhurst (CD11),311,Fine Particulate Matter (PM2.5),8.6,8.4,8.8
+Annual Average 2014,Neighborhood (community district),Brooklyn, Borough Park (CD12),312,Fine Particulate Matter (PM2.5),8.9,8.6,9.1
+Annual Average 2014,Neighborhood (community district),Brooklyn, Brownsville (CD16),316,Fine Particulate Matter (PM2.5),9.2,8.8,10.2
+Annual Average 2014,Neighborhood (community district),Brooklyn, Bushwick (CD4),304,Fine Particulate Matter (PM2.5),9.3,8.6,10.4
+Annual Average 2014,Neighborhood (community district),Manhattan, Central Harlem (CD10),110,Fine Particulate Matter (PM2.5),9.7,9.4,10
+Annual Average 2014,Neighborhood (community district),Manhattan, Clinton and Chelsea (CD4),104,Fine Particulate Matter (PM2.5),11.6,10.1,13.1
+Annual Average 2014,Neighborhood (community district),Brooklyn, Coney Island (CD13),313,Fine Particulate Matter (PM2.5),8.3,8,8.6
+Annual Average 2014,Neighborhood (community district),Brooklyn, Crown Heights and Prospect Heights (CD8),308,Fine Particulate Matter (PM2.5),9.2,8.9,9.6
+Annual Average 2014,Neighborhood (community district),Brooklyn, East Flatbush (CD17),317,Fine Particulate Matter (PM2.5),9.1,8.7,9.6
+Annual Average 2014,Neighborhood (community district),Manhattan, East Harlem (CD11),111,Fine Particulate Matter (PM2.5),9.8,9.5,10.3
+Annual Average 2014,Neighborhood (community district),Brooklyn, East New York and Starrett City (CD5),305,Fine Particulate Matter (PM2.5),9,8.2,10.1
+Annual Average 2014,Neighborhood (community district),Queens, Elmhurst and Corona (CD4),404,Fine Particulate Matter (PM2.5),9.2,8.7,9.7
+Annual Average 2014,Neighborhood (community district),Manhattan, Financial District (CD1),101,Fine Particulate Matter (PM2.5),11.4,10.8,11.8
+Annual Average 2014,Neighborhood (community district),Brooklyn, Flatbush and Midwood (CD14),314,Fine Particulate Matter (PM2.5),8.9,8.6,9.3
+Annual Average 2014,Neighborhood (community district),Brooklyn, Flatlands and Canarsie (CD18),318,Fine Particulate Matter (PM2.5),8.5,7.9,9.3
+Annual Average 2014,Neighborhood (community district),Queens, Flushing and Whitestone (CD7),407,Fine Particulate Matter (PM2.5),8.7,8.1,9.6
+Annual Average 2014,Neighborhood (community district),Bronx, Fordham and University Heights (CD5),205,Fine Particulate Matter (PM2.5),10.1,9.6,10.7
+Annual Average 2014,Neighborhood (community district),Brooklyn, Fort Greene and Brooklyn Heights (CD2),302,Fine Particulate Matter (PM2.5),10,9.4,10.8
+Annual Average 2014,Neighborhood (community district),Brooklyn, Greenpoint and Williamsburg (CD1),301,Fine Particulate Matter (PM2.5),10.6,9.9,11.6
+Annual Average 2014,Neighborhood (community district),Manhattan, Greenwich Village and Soho (CD2),102,Fine Particulate Matter (PM2.5),11.2,10.3,11.8
+Annual Average 2014,Neighborhood (community district),Bronx, Highbridge and Concourse (CD4),204,Fine Particulate Matter (PM2.5),10,9.7,10.4
+Annual Average 2014,Neighborhood (community district),Queens, Hillcrest and Fresh Meadows (CD8),408,Fine Particulate Matter (PM2.5),8.4,8.1,8.9
+Annual Average 2014,Neighborhood (community district),Bronx, Hunts Point and Longwood (CD2),202,Fine Particulate Matter (PM2.5),10,8.6,11.2
+Annual Average 2014,Neighborhood (community district),Queens, Jackson Heights (CD3),403,Fine Particulate Matter (PM2.5),8.7,8.3,9.1
+Annual Average 2014,Neighborhood (community district),Queens, Jamaica and Hollis (CD12),412,Fine Particulate Matter (PM2.5),8.4,8,9
+Annual Average 2014,Neighborhood (community district),Queens, Kew Gardens and Woodhaven (CD9),409,Fine Particulate Matter (PM2.5),8.7,8.3,9.2
+Annual Average 2014,Neighborhood (community district),Bronx, Kingsbridge Heights and Bedford (CD7),207,Fine Particulate Matter (PM2.5),9.5,9.2,9.9
+Annual Average 2014,Neighborhood (community district),Queens, Long Island City and Astoria (CD1),401,Fine Particulate Matter (PM2.5),9.2,8.2,10
+Annual Average 2014,Neighborhood (community district),Manhattan, Lower East Side and Chinatown (CD3),103,Fine Particulate Matter (PM2.5),10.3,9.3,11.5
+Annual Average 2014,Neighborhood (community district),Manhattan, Midtown (CD5),105,Fine Particulate Matter (PM2.5),14.2,12.9,15.4
+Annual Average 2014,Neighborhood (community district),Manhattan, Morningside Heights and Hamilton Heights (CD9),109,Fine Particulate Matter (PM2.5),9.8,9.4,10.2
+Annual Average 2014,Neighborhood (community district),Bronx, Morris Park and Bronxdale (CD11),211,Fine Particulate Matter (PM2.5),8.9,8.7,9.2
+Annual Average 2014,Neighborhood (community district),Bronx, Morrisania and Crotona (CD3),203,Fine Particulate Matter (PM2.5),9.5,9.1,9.9
+Annual Average 2014,Neighborhood (community district),Bronx, Mott Haven and Melrose (CD1),201,Fine Particulate Matter (PM2.5),10.1,9.5,10.9
+Annual Average 2014,Neighborhood (community district),Brooklyn, Park Slope and Carroll Gardens (CD6),306,Fine Particulate Matter (PM2.5),9.9,9.1,10.9
+Annual Average 2014,Neighborhood (community district),Bronx, Parkchester and Soundview (CD9),209,Fine Particulate Matter (PM2.5),9.1,8.2,9.9
+Annual Average 2014,Neighborhood (community district),Queens, Queens Village (CD13),413,Fine Particulate Matter (PM2.5),8,7.8,8.4
+Annual Average 2014,Neighborhood (community district),Queens, Rego Park and Forest Hills (CD6),406,Fine Particulate Matter (PM2.5),8.9,8.4,9.7
+Annual Average 2014,Neighborhood (community district),Queens, Ridgewood and Maspeth (CD5),405,Fine Particulate Matter (PM2.5),9.2,8.3,10.8
+Annual Average 2014,Neighborhood (community district),Bronx, Riverdale and Fieldston (CD8),208,Fine Particulate Matter (PM2.5),9,8.5,9.8
+Annual Average 2014,Neighborhood (community district),Queens, Rockaway and Broad Channel (CD14),414,Fine Particulate Matter (PM2.5),7.7,7.6,7.8
+Annual Average 2014,Neighborhood (community district),Brooklyn, Sheepshead Bay (CD15),315,Fine Particulate Matter (PM2.5),8.4,8,8.8
+Annual Average 2014,Neighborhood (community district),Staten Island, South Beach and Willowbrook (CD2),502,Fine Particulate Matter (PM2.5),8.5,8,9.3
+Annual Average 2014,Neighborhood (community district),Brooklyn, South Crown Heights and Lefferts Gardens (CD9),309,Fine Particulate Matter (PM2.5),9,8.8,9.2
+Annual Average 2014,Neighborhood (community district),Queens, South Ozone Park and Howard Beach (CD10),410,Fine Particulate Matter (PM2.5),8.2,7.9,8.7
+Annual Average 2014,Neighborhood (community district),Staten Island, St. George and Stapleton (CD1),501,Fine Particulate Matter (PM2.5),8.6,8.2,9.1
+Annual Average 2014,Neighborhood (community district),Manhattan, Stuyvesant Town and Turtle Bay (CD6),106,Fine Particulate Matter (PM2.5),12.4,10.4,14.1
+Annual Average 2014,Neighborhood (community district),Brooklyn, Sunset Park (CD7),307,Fine Particulate Matter (PM2.5),9.7,8.7,10.8
+Annual Average 2014,Neighborhood (community district),Bronx, Throgs Neck and Co-op City (CD10),210,Fine Particulate Matter (PM2.5),8.9,8.1,9.9
+Annual Average 2014,Neighborhood (community district),Staten Island, Tottenville and Great Kills (CD3),503,Fine Particulate Matter (PM2.5),8.2,7.9,8.7
+Annual Average 2014,Neighborhood (community district),Manhattan, Upper East Side (CD8),108,Fine Particulate Matter (PM2.5),11.2,10,12.2
+Annual Average 2014,Neighborhood (community district),Manhattan, Upper West Side (CD7),107,Fine Particulate Matter (PM2.5),10.4,10,10.8
+Annual Average 2014,Neighborhood (community district),Manhattan, Washington Heights and Inwood (CD12),112,Fine Particulate Matter (PM2.5),9.5,8.8,10.4
+Annual Average 2014,Neighborhood (community district),Bronx, Williamsbridge and Baychester (CD12),212,Fine Particulate Matter (PM2.5),8.9,8.6,9.5
+Annual Average 2014,Neighborhood (community district),Queens, Woodside and Sunnyside (CD2),402,Fine Particulate Matter (PM2.5),10.5,9.3,11.9
+,,,,,,,,
+Name:Fine Particulate Matter (PM2.5),Measure:Mean (mcg per cubic meter),How Calculated:<p>Air samples collected at specific NYCCAS monitoring sites along with information about emissions sources were incorporated into a statistical model that predicted pollutant concentrations at all locations in NYC for the specified time period. The results were then assigned to the appropriate NYC neighborhood and averaged. In NYC fine particulate matter is measured in units of micrograms per cubic meter of air.</p>,Source(s):New York City Community Air Su,Year:Annual Average 2014,,,,
+Name:Fine Particulate Matter (PM2.5),Measure:10th Percentile (mcg per cubic meter),How Calculated:<p>Air samples collected at specific NYCCAS monitoring sites along with information about emissions sources were incorporated into a statistical model that predicted pollutant concentrations at all locations in NYC for the specific time period. The results were then assigned to the appropriate NYC neighborhood and the 10th percentile identified. In NYC fine particulate matter is measured in units of micrograms per cubic meter of air.</p>,Source(s):New York City Community Air Su,Year:Annual Average 2014,,,,
+Name:Fine Particulate Matter (PM2.5),Measure:90th Percentile (mcg per cubic meter),How Calculated:<p>Air samples collected at specific NYCCAS monitoring sites along with information about emissions sources were incorporated into a statistical model that predicted pollutant concentrations at all locations in NYC for the specific time period. The results were then assigned to the appropriate NYC neighborhood and the 90th percentile identified. In NYC fine particulate matter is measured in units of micrograms per cubic meter of air.</p>,Source(s):New York City Community Air Su,Year:Annual Average 2014,,,,
+,,,,,,,,
+NYC Department of Health and Mental Hygiene,,,,,,,,
+Environment & Health Data Portal,,,,,,,,
+More information can be found at: http://nyc.gov/health/tracking,,,,,,,,
+Accessed 11/26/2018,,,,,,,,
