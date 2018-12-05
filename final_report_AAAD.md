@@ -23,19 +23,23 @@ Initial questions
 Data
 ----
 
-*Source, scraping method, cleaning, etc.*
+*Source, scraping method, cleaning, etc - Anjile*
+
+Acknowledge multiple ways of measuring things - days, person-days, ug/m3 etc. Justify! - Ozone was not used bc not consistently measured across counties.
 
 Exploratory analysis
 --------------------
 
-*Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.*
+*Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.* - Ashley, Div
 
 Additional analysis
 -------------------
 
-*If you undertake formal statistical analyses, describe these in detail.*
+*If you undertake formal statistical analyses, describe these in detail.* - Model building - Looked at associations, trends
 
 Discussion
 ----------
 
 *What were your findings? Are they what you expect? What insights into the data can you make?*
+
+Limitation - So many things in air, mixtures, hard to get data on/complicated to analyze. Include in future models.

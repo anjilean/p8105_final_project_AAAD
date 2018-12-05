@@ -27,20 +27,29 @@ Our goal is to illustrate potential health disparities across New York State, th
 ## Related work
 *Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
-
 ## Initial questions 
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
 
 ## Data
-*Source, scraping method, cleaning, etc.*
+*Source, scraping method, cleaning, etc - Anjile*
+
+Acknowledge multiple ways of measuring things - days, person-days, ug/m3 etc. Justify! 
+- Ozone was not used bc not consistently measured across counties. 
+
 
 ## Exploratory analysis
 *Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.*
+- Ashley, Div
 
 ## Additional analysis
 *If you undertake formal statistical analyses, describe these in detail.*
+- Model building
+- Looked at associations, trends
 
 ## Discussion
 *What were your findings? Are they what you expect? What insights into the data can you make?*
 
+
+Limitation
+- So many things in air, mixtures, hard to get data on/complicated to analyze. Include in future models.
 
