@@ -148,8 +148,8 @@ cv_asthma = crossv_mc(nys_joined, 100)
 # Fit candidate models
 options(warn = -1) # suppress printing all the warnings
 cv_asthma = cv_asthma %>%
-  mutate(crude_asthma_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days, data = .x)),
-         adj_asthma_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = .x))) %>%
+  mutate(crude_asthma_mod = map(train, ~lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days, data = .x)),
+         adj_asthma_mod = map(train, ~lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = .x))) %>%
   mutate(rmse_crude = map2_dbl(crude_asthma_mod, test, ~rmse(model = .x, data = .y)),
          rmse_adj = map2_dbl(adj_asthma_mod, test, ~rmse(model = .x, data = .y)))
 
@@ -169,3 +169,74 @@ cv_asthma %>%
 ```
 
 <img src="model_building_files/figure-markdown_github/asthma_cv-1.png" width="90%" />
+
+#### Diagnostics of adjusted asthma model
+
+``` r
+# Plotting residuals
+nys_joined %>%
+  add_residuals(adj_asthma_model) %>%
+  add_predictions(adj_asthma_model) %>%
+  ggplot(aes(x = pred, y = resid)) + 
+  labs(
+    title = "Plot of residuals against fitted values",
+    x = "Predicted values",
+    y = "Residuals"
+  ) +
+  geom_point(alpha = .5) + 
+  geom_smooth(se = FALSE)
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="model_building_files/figure-markdown_github/asthma_diagnostics-1.png" width="90%" />
+
+#### CVD model
+
+``` r
+set.seed(1)
+cv_cvd = crossv_mc(nys_joined, 100) 
+
+# Fit candidate models
+options(warn = -1) # suppress printing all the warnings
+cv_cvd = cv_cvd %>%
+  mutate(crude_cvd_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days, data = .x)),
+         adj_cvd_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = .x))) %>%
+  mutate(rmse_crude = map2_dbl(crude_cvd_mod, test, ~rmse(model = .x, data = .y)),
+         rmse_adj = map2_dbl(adj_cvd_mod, test, ~rmse(model = .x, data = .y)))
+
+# Plot distribution of RMSE
+cv_cvd %>% 
+  select(starts_with("rmse")) %>% 
+  gather(key = model, value = rmse) %>% 
+  mutate(model = str_replace(model, "rmse_", ""),
+         model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + 
+  labs(
+    title = "Violin plots of RMSE, CVD",
+    y = "RMSE",
+    x = "Model"
+  ) +
+  geom_violin()
+```
+
+<img src="model_building_files/figure-markdown_github/cvd_cv-1.png" width="90%" />
+
+#### Diagnostics of adjusted cvd model
+
+``` r
+# Plotting residuals
+nys_joined %>%
+  add_residuals(adj_cvd_model) %>%
+  add_predictions(adj_cvd_model) %>%
+  ggplot(aes(x = pred, y = resid)) + 
+  labs(
+    title = "Plot of residuals against fitted values",
+    x = "Predicted values",
+    y = "Residuals"
+  ) +
+  geom_point(alpha = .5) + 
+  geom_smooth(se = FALSE)
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+
+<img src="model_building_files/figure-markdown_github/cvd_diagnostics-1.png" width="90%" />
