@@ -53,9 +53,6 @@ nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>%
          airq_unhealthy_days = unhealthy_days,
          airq_very_unhealthy_days = very_unhealthy_days,
          airq_hazardous_days = hazardous_days)
-
-# change NAs to 0 for ease of regression analysis
-nys_pm25[is.na(nys_pm25)] = 0
 ```
 
 ``` r
@@ -76,6 +73,9 @@ asthma_cvd_join = full_join(asthma_ed, cvd_hosp, by = "county")
 pm25_numhosp_join = full_join(nys_pm25, num_hosp, by = "county")
 
 nys_joined = left_join(asthma_cvd_join, pm25_numhosp_join, by = "county")
+
+# change NAs to 0 for ease of regression analysis
+nys_joined[is.na(nys_joined)] = 0
 ```
 
 **Checks before regression analysis:**
@@ -190,6 +190,8 @@ nys_joined %>%
 
 <img src="model_building_files/figure-markdown_github/asthma_diagnostics-1.png" width="90%" />
 
+The plot of the residuals illustrates that the model does not predict higher values very well, which makes sense given that the rate of asthma hospitalizations events is generally not very high, save for select counties in NYC. The values cluster in the lower end of the distribution, and the fitted line jumps around, maybe in large part due to the small number of counties.
+
 #### CVD model
 
 ``` r
@@ -221,7 +223,7 @@ cv_cvd %>%
 
 <img src="model_building_files/figure-markdown_github/cvd_cv-1.png" width="90%" />
 
-#### Diagnostics of adjusted cvd model
+#### Diagnostics of adjusted CVD model
 
 ``` r
 # Plotting residuals
@@ -240,3 +242,5 @@ nys_joined %>%
 ```
 
 <img src="model_building_files/figure-markdown_github/cvd_diagnostics-1.png" width="90%" />
+
+The plot of the residuals for the adjusted CVD hospitalizations model shows that the residuals are widely distributed for the lower predicted values, and has similar issues to the asthma hospitalizations plot in that the small sample size pulling the fitted line.
