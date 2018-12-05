@@ -1,6 +1,6 @@
 # P8105 Final Project for Team AAAD
 
-The effect of Air Quality on Asthma and CVD ER Hospitalizations in New York State, 2014.
+**The Effect of Air Quality on Asthma and CVD ER Hospitalizations in New York State, 2014.**
 
 Team members: 
 
