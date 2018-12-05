@@ -6,34 +6,36 @@ Due December 11, 2018
 Motivation
 ----------
 
-We are interested in how environmental determinants of health, especially the short term effects of air quality measures, affect acute health outcomes such as asthma and cardiovascular disease hospitalizations. This also helps us understand the burden of acute health outcomes especially given our changing climate. We hope our results will help illustrate potential health disparities within and across New York State and thus areas requiring future research.
+Unlike many factors we can control in determining our health, outdoor air quality is almost impossible to alter given its ubiquitous nature. We are interested in how environmental determinants of health, especially the short term effects of air quality measures, affect acute health outcomes. This also helps us understand the burden of acute health outcomes especially given our changing climate, and the potential impact of worsening air quality in both urban areas and rural areas.
+
+Our goal is to illustrate potential health disparities across New York State, the trends in the relationship between air quality and acute health outcomes, and areas (geographically and scientifically) requiring future research.
 
 Related work
 ------------
 
-Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+*Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
 Initial questions
 -----------------
 
-What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+*What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
 
 Data
 ----
 
-Source, scraping method, cleaning, etc.
+*Source, scraping method, cleaning, etc.*
 
 Exploratory analysis
 --------------------
 
-Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+*Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.*
 
 Additional analysis
 -------------------
 
-If you undertake formal statistical analyses, describe these in detail
+*If you undertake formal statistical analyses, describe these in detail.*
 
 Discussion
 ----------
 
-What were your findings? Are they what you expect? What insights into the data can you make?
+*What were your findings? Are they what you expect? What insights into the data can you make?*
