@@ -1,0 +1,39 @@
+Final Project Report
+================
+Anjile An, Ashley Kang, Amelia Grant-Alfieri, Divya Bisht
+Due December 11, 2018
+
+Motivation
+----------
+
+We are interested in how environmental determinants of health, especially the short term effects of air quality measures, affect acute health outcomes such as asthma and cardiovascular disease hospitalizations. This also helps us understand the burden of acute health outcomes especially given our changing climate. We hope our results will help illustrate potential health disparities within and across New York State and thus areas requiring future research.
+
+Related work
+------------
+
+Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+
+Initial questions
+-----------------
+
+What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+
+Data
+----
+
+Source, scraping method, cleaning, etc.
+
+Exploratory analysis
+--------------------
+
+Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+Additional analysis
+-------------------
+
+If you undertake formal statistical analyses, describe these in detail
+
+Discussion
+----------
+
+What were your findings? Are they what you expect? What insights into the data can you make?
