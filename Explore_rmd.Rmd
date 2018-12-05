@@ -10,8 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-## To be copy/pasted into the Explore tab on the Ashley's website project. 
-
 Early exploration was done with data from New York City counties and NY state-wide counties 
 
 Looking at all age groups instead of stratifying by age because trends of exposure were similar across age groups. 
