@@ -1,7 +1,11 @@
-# p8105_final_project_AAAD
-Final Project for P8105
+# P8105 Final Project for Team AAAD
 
-http://p8105.com/final_project.html
+The effect of Air Quality on Asthma and CVD ER Hospitalizations in New York State, 2014.
+
+Team members: 
+
+Anjile An, Ashley Kang, Amelia Grant-Alfieri, and Divya Bisht
+
 
 Deadlines:
 
@@ -12,3 +16,5 @@ Deadlines:
 * December 3rd: finish analysis, start working on final website + sceencast script.
 
 * December 6th: everything due!!
+
+http://p8105.com/final_project.html
