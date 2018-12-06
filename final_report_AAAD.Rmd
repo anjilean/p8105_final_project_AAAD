@@ -34,7 +34,6 @@ Previous classwork utilizing NOAA data inspired us to explore other kinds of env
 =======
 Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data.  
 We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
->>>>>>> 86c08e47f37f82e7b6e7eb038c1fd090dfe96998
 
 ## Initial questions 
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
@@ -47,8 +46,7 @@ Acknowledge multiple ways of measuring things - days, person-days, ug/m3 etc. Ju
 
 
 ## Exploratory analysis
-<<<<<<< HEAD
-```{r setup, include=FALSE}
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
