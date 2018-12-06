@@ -51,12 +51,6 @@ For our data analysis, we used data from [New York State DOH HealthData](https:/
 -   We selected for 2014, to match our outcome data.
 -   PM 2.5 was also measured in a variety of ways for the 13 counties, including ug/m^3, percent, and person-days, which is not standard across available datasets.
 
-[Ozone by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData)
-
--   This dataset had ozone by county data for 2000 - 2016, but the data was very also incomplete as with the PM 2.5 data, with only 26 out of 62 counties reporting measures.
--   We selected for 2014, to match our outcome data.
--   Ozone was measured in days and person-days, which is also different from the PM 2.5 reporting.
-
 [Annual summary air quality index data by county, 2014](https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual)
 
 -   This dataset provided county level air quality index (0-500 scale) data for 2014, and we selected for New York State, but only 29 counties had available data.
