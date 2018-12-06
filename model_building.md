@@ -13,7 +13,7 @@ To build our model, we are looking at New York State asthma hospitalizations dat
 # Source: NYSDOH Health Data NY
 # remove "regions"
 
-asthma_ed = read_csv(file = "./data_AA/asthma_ED_rate_10000.csv") %>% 
+asthma_ed = read_csv(file = "./data/data_AA/asthma_ED_rate_10000.csv") %>% 
   janitor::clean_names() %>%
   select(county_name, event_count_rate, percentage_rate_ratio, data_years) %>%
   filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
@@ -28,7 +28,7 @@ asthma_ed = read_csv(file = "./data_AA/asthma_ED_rate_10000.csv") %>%
 # Source: NYSDOH Health Data NY
 # remove "regions"
 
-cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000.csv") %>%
+cvd_hosp = read_csv(file = "./data/data_AA/ageadjusted_cvd_hospitalization_rate_10000.csv") %>%
   janitor::clean_names() %>%
   filter(health_topic == "Cardiovascular Disease Indicators") %>%
   filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
@@ -43,7 +43,7 @@ cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000
 # PM 2.5 annual summary data by county
 # Source: US EPA AQS, 2014
 
-nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>% 
+nys_pm25 = read_csv(file = "./data/data_AA/annual_aqi_by_county_2014.csv") %>% 
   janitor::clean_names() %>%
   filter(state == "New York") %>%
   select(county, good_days:median_aqi) %>%
@@ -59,7 +59,7 @@ nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>%
 # NYS county population and number of hospitals
 # Source: NYS HealthData, 2014
 
-num_hosp = read_csv(file = "./data_AA/nys_county_hospitals_2014.csv") %>% 
+num_hosp = read_csv(file = "./data/data_AA/nys_county_hospitals_2014.csv") %>% 
   janitor::clean_names() %>%
   rename(county = geography) %>%
   mutate(county = str_replace(county, " County", "")) %>%
@@ -154,21 +154,19 @@ cv_asthma = cv_asthma %>%
          rmse_adj = map2_dbl(adj_asthma_mod, test, ~rmse(model = .x, data = .y)))
 
 # Plot distribution of RMSE
-cv_asthma %>% 
+asthma_rmse = cv_asthma %>% 
   select(starts_with("rmse")) %>% 
   gather(key = model, value = rmse) %>% 
   mutate(model = str_replace(model, "rmse_", ""),
          model = fct_inorder(model)) %>% 
   ggplot(aes(x = model, y = rmse, fill = model)) + 
   labs(
-    title = "Violin plots of RMSE, Asthma Hospitalizations",
+    title = "Violin plots of RMSE, Asthma",
     y = "RMSE",
     x = "Model"
   ) +
   geom_violin()
 ```
-
-<img src="model_building_files/figure-markdown_github/asthma_cv-1.png" width="90%" />
 
 #### Diagnostics of adjusted asthma model
 
@@ -179,7 +177,7 @@ nys_joined %>%
   add_predictions(adj_asthma_model) %>%
   ggplot(aes(x = pred, y = resid)) + 
   labs(
-    title = "Plot of residuals against fitted values",
+    title = "Plot of residuals against fitted values, asthma",
     x = "Predicted values",
     y = "Residuals"
   ) +
@@ -207,21 +205,19 @@ cv_cvd = cv_cvd %>%
          rmse_adj = map2_dbl(adj_cvd_mod, test, ~rmse(model = .x, data = .y)))
 
 # Plot distribution of RMSE
-cv_cvd %>% 
+cvd_rmse = cv_cvd %>% 
   select(starts_with("rmse")) %>% 
   gather(key = model, value = rmse) %>% 
   mutate(model = str_replace(model, "rmse_", ""),
          model = fct_inorder(model)) %>% 
   ggplot(aes(x = model, y = rmse, fill = model)) + 
   labs(
-    title = "Violin plots of RMSE, CVD Hospitalizations",
+    title = "Violin plots of RMSE, CVD",
     y = "RMSE",
     x = "Model"
   ) +
   geom_violin()
 ```
-
-<img src="model_building_files/figure-markdown_github/cvd_cv-1.png" width="90%" />
 
 #### Diagnostics of adjusted CVD model
 
@@ -232,7 +228,7 @@ nys_joined %>%
   add_predictions(adj_cvd_model) %>%
   ggplot(aes(x = pred, y = resid)) + 
   labs(
-    title = "Plot of residuals against fitted values",
+    title = "Plot of residuals against fitted values, CVD",
     x = "Predicted values",
     y = "Residuals"
   ) +
@@ -245,58 +241,28 @@ nys_joined %>%
 
 The plot of the residuals for the adjusted CVD hospitalizations model shows that the residuals are widely distributed for the lower predicted values, and has similar issues to the asthma hospitalizations plot in that the small sample size pulling the fitted line.
 
+#### Putting RMSE plots together
+
+``` r
+asthma_rmse + cvd_rmse
+```
+
+<img src="model_building_files/figure-markdown_github/rmse_plots-1.png" width="90%" />
+
 Final models
 ------------
 
 ``` r
-# Adjusted asthma model
+#### Adjusted asthma model ####
 adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
-summary(adj_asthma_model)
-## 
-## Call:
-## lm(formula = asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + 
-##     number_of_hospitals, data = nys_joined)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -143.08  -25.36   -8.35   19.10  403.28 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)            63.033     11.203   5.627 5.34e-07 ***
-## total_unhealthy_days   21.204      8.780   2.415 0.018847 *  
-## number_of_hospitals     9.170      2.452   3.740 0.000419 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 66.47 on 59 degrees of freedom
-## Multiple R-squared:  0.424,  Adjusted R-squared:  0.4044 
-## F-statistic: 21.71 on 2 and 59 DF,  p-value: 8.579e-08
+
+# summary(adj_asthma_model)
 # summary(crude_asthma_model)
 
-# Adjusted CVD model
+#### Adjusted CVD model ####
 adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
-summary(adj_cvd_model)
-## 
-## Call:
-## lm(formula = cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, 
-##     data = nys_joined)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -58.03 -14.66   0.80  13.00  41.60 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          119.9347     3.4517  34.747   <2e-16 ***
-## total_unhealthy_days   0.6267     2.7051   0.232   0.8176    
-## number_of_hospitals    1.3145     0.7555   1.740   0.0871 .  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 20.48 on 59 degrees of freedom
-## Multiple R-squared:  0.07996,    Adjusted R-squared:  0.04877 
-## F-statistic: 2.564 on 2 and 59 DF,  p-value: 0.08556
+
+# summary(adj_cvd_model)
 # summary(crude_cvd_model)
 ```
 
