@@ -66,19 +66,16 @@ For our data analysis, we used data from [New York State DOH HealthData](https:/
 Exploratory analysis
 --------------------
 
-Background & Objectives
------------------------
-
 ### Exploration
 
-Initial PM2.5 data exploration was focused on New York City counties. However, limited data was available available, so NY state county data were selected to demonstrate the relationship between PM2.5 and hospitalizations of asthma and CVD.
+Initial PM2.5 data exploration was focused on New York City counties. However, limited data was available, so NY state county data were selected to demonstrate the relationship between PM2.5 and hospitalizations of asthma and CVD.
 
 Over 2000-2014, levels of PM2.5 across all counties in New York State have steadily decreased.
 
 #### PM2.5 Dataset, 2000-2014
 
 ``` r
-PM_county_NYS = read_csv("PM2.5_county_NYS.csv") %>%
+PM_county_NYS = read_csv("./data/PM2.5_county_NYS.csv") %>%
   janitor::clean_names() %>%
   #filter(year == "2014") %>%
   select(county_name, year, output, measure) %>%
@@ -107,7 +104,7 @@ Next, we wanted to assess how PM2.5 exposure varied across counties in NY State.
 #### PM2.5 EPA dataset
 
 ``` r
-nyc_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>% 
+nyc_pm25 = read_csv(file = "./data/data_AA/annual_aqi_by_county_2014.csv") %>% 
   janitor::clean_names() %>%
   filter(state == "New York")
 ## Parsed with column specification:
@@ -123,9 +120,9 @@ nyc_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>%
 
 ``` r
 pm_hist = nyc_pm25 %>%
-  ggplot(aes(x = county, y = days_pm2_5)) + 
+  ggplot(aes(x = reorder(county, -days_pm2_5), y = days_pm2_5)) + 
   labs(
-    title = "Days of PM2.5 by Borough",
+    title = "Days of PM2.5 by County",
     x = "County",
     y = "Days with PM2.5") +
   geom_histogram(stat = "identity") + theme(axis.text.x = element_text(angle = 90))
@@ -136,12 +133,14 @@ pm_hist
 
 <img src="final_report_AAAD_files/figure-markdown_github/unnamed-chunk-4-1.png" width="90%" />
 
+Kings, Oneida, and Nassau reported the most number of days of PM2.5.
+
 Literature shows that exposure to PM2.5 is associated with asthma and cardiovascular disease. Therefore, we wanted to assess hospitalization of asthma and CVD across counties.
 
 #### Asthma ER Admissions Rate Dataset, 2014
 
 ``` r
-asthma_ER = read_csv("Asthma_ER_Rate_10000.csv") %>%
+asthma_ER = read_csv("./data/Asthma_ER_Rate_10000.csv") %>%
   janitor::clean_names() %>%
   #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
   select(county_name, percentage_rate_ratio, data_years) %>%
@@ -166,7 +165,7 @@ asthma_plot_14
 #### Cardiovascular hospitalizations
 
 ``` r
-cvd_data = read_csv(file = "./data_AK/Community_Health__Age-adjusted_Cardiovascular_Disease_Hospitalization_Rate_per_10_000_by_County_Map__Latest_Data.csv") %>% 
+cvd_data = read_csv(file = "./data/data_AK/Community_Health__Age-adjusted_Cardiovascular_Disease_Hospitalization_Rate_per_10_000_by_County_Map__Latest_Data.csv") %>% 
   janitor::clean_names() %>%
   filter(health_topic %in% "Cardiovascular Disease Indicators") %>% 
   select(county_name, event_count, average_number_of_denominator, 
@@ -190,7 +189,7 @@ cvd_data %>%
 
 <img src="final_report_AAAD_files/figure-markdown_github/cvd_bar_nys-1.png" width="90%" />
 
-======= *Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.* - Ashley, Div &gt;&gt;&gt;&gt;&gt;&gt;&gt; 86c08e47f37f82e7b6e7eb038c1fd090dfe96998
+Bronx recorded the highest rates of asthma emergency room admissions, which was more than double that of New York county (second highest rate), and nearly triple that of Kings county (third highest rate). Bronx also recorded the highest rates of cardiovascular hospitalization, with Niagara and Orleans following.
 
 Additional analysis
 -------------------
