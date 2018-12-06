@@ -29,7 +29,8 @@ We were interested in how air pollution in New York State, including specific co
 ## Related work
 *Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
-Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data.  
+Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental health data, and how to join data across sources.  
+
 We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
 
 ## Initial questions 
