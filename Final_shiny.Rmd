@@ -1,4 +1,0 @@
----
-title: "Shiny"
-output: html_document
----
