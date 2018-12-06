@@ -2,7 +2,7 @@
 title: "Explore"
 author: "Divya Bisht"
 date: "12/2/2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
