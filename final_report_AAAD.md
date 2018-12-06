@@ -34,6 +34,8 @@ Data
 
 For our data analysis, we used data from [New York State DOH HealthData](https://data.ny.gov/browse?category=Health&utf8=%E2%9C%93), [NYCDOH Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/publictracking.aspx), and [United States Environmental Protection Agency AirData](https://www.epa.gov/outdoor-air-quality-data).
 
+To access the CSVs used, [click here](https://drive.google.com/drive/u/0/folders/1_3HhtUXWRW23bItsjk7FQMvZp1NuCZma)
+
 [Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz)
 
 -   We noticed right away that this dataset only had data from 2014 from SPARCS, which became an important factor in selecting future datasets to use in our analysis.
