@@ -1,29 +1,34 @@
 Final Project Report
 ================
-Anjile An, Ashley Kang, Amelia Grant-Alfieri, Divya Bisht
-Due December 11, 2018
+Anjile An (ja3237), Ashley Kang (aik2136), Divya Bisht (db3180), Amelia Grant-Alfieri (ag3911)
+Due December 6, 2018
 
 Motivation
 ----------
 
 Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter given its ubiquitous nature. Across the globe, it accounts for significant morbidity and, to a lesser degree, mortality. Indoor air pollution is also an important exposure pathway particularly for women and children who live in households that burn solid fuel for cooking and heating. For this project, we focused on ambient air quality because there is more available data and because indoor air pollution is less widespread in the United States and New York State than in other places around the world.
 
-When someone breathes, they are exposed not to a single compound in isolation but rather to a mixture of compounds. Two compounds that are known to confer toxicity are ozone and fine particulate matter (PM2.5). Ozone is a fat soluble chemical than can bypass absorption in the upper respiratory system and penetrate down into the alveoli. PM2.5 is a tiny particle that, due to it's size, can also travel deep into the alveoli. Both PM2.5 and ozone can have harmful local effects in the respiratory system and, because of their ability to cross from the lung into the bloodstream, can have harmful distal effects throughout the cardiovascular system.
+When someone breathes, they are exposed not to a single compound in isolation but rather to a mixture of compounds. Two compounds that are known to confer toxicity are ozone and fine particulate matter (PM2.5). Ozone is a fat soluble chemical than can bypass absorption in the upper respiratory system and penetrate down into the alveoli. PM2.5 is a tiny particle that, due to its size, can also travel deep into the alveoli. Both PM2.5 and ozone can have harmful local effects in the respiratory system and, because of their ability to cross from the lung into the bloodstream, can have harmful distal effects throughout the cardiovascular system.
 
-We were interested in how air pollution in New York State, including specific compounds like PM2.5 and ozone, may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate potential health disparities across New York State, the trends in the relationship between air quality and acute health outcomes, and areas (geographically and scientifically) requiring future research.
+We were interested in how air pollution in New York State, measured through proxies such as PM2.5, ozone and air quality index (AQI), may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate trends in the relationship between air quality and acute health outcomes and areas (geographically and scientifically) requiring future research.
 
 Related work
 ------------
 
 *Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data. We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. ======= Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data.
-We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health.
+Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health, Columbia University, as well as previous classwork utilizing NOAA data inspired us to explore environmental data. Throughout our studies, we have learned that air pollution is known to have detrimental effects on human health. For instance, [high PM2.5](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/) and [ozone exposure](https://www.atsjournals.org/doi/abs/10.1164/rccm.201811-2106ED) causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease. We became personally interested about how air quality here may adversely affect our health outcomes upon learning that New York ranks tenth in [most polluted cities (by ozone)](https://www.lung.org/our-initiatives/healthy-air/sota/city-rankings/most-polluted-cities.html) in the United States.
 
 Initial questions
 -----------------
 
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
+
+Our team wanted to investigate how exposure to air quality might affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions.
+
+Initially, we looked at PM2.5 as a measure of air quality. We additionally looked into ozone levels across NY state counties. However, the data for both PM2.5 and ozone were sparse on their own. We finally settled on using the Air Quality Index (AQI) since it aggregates different measures of air pollutants including PM2.5 and ozone.
+
+Our question was focused on looking at hospitalizations and air pollutant exposure in New York City. However, investigating our data across New York City boroughs didn’t bring about substantial or interesting results because there wasn’t enough data available. Therefore, we adapted decided to look at AQI across New York State Counties.
 
 Data
 ----
@@ -37,10 +42,6 @@ Exploratory analysis
 
 Background & Objectives
 -----------------------
-
-Air pollution is known to have detrimental effects on human health. This study seeks to investigate air pollution, measured here as fine particulate matter (PM2.5), across New York State counties. In order to assess how PM2.5 exposure might be related to human health, we looked at asthma and cardiovascular (CVD) hospitalizations across New York counties. High PM2.5 causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease.
-
-Article: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/>
 
 ### Exploration
 
@@ -177,6 +178,6 @@ Discussion
 
 Asthma is chronic disease so asthma emergency room visit rates reflect asthma exacerbation incidents. In contrast, cardiovascular hospitalization rates do not differentiate between a one-time acute episode like a stroke or an exacerbation of an underlying cardiovascular condition like high blood pressure or arrhythmia.
 
-Limitation - So many things in air, mixtures, hard to get data on/complicated to analyze. Include in future models.
+Limitation - So many things in air, mixtures, hard to get data on/complicated to analyze. Include in future models. -CVD is 2012-2014, asthma is just 2014
 
 It is critical to note that poor communities are more susceptible to the potential life-threatening, acute effects of air pollution because they are more likely to have chronic diseases like asthma and heart disease and are more likely to live in more highly contaminated neighborhoods.
