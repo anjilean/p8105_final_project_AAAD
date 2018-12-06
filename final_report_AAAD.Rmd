@@ -29,6 +29,7 @@ We were interested in how air pollution in New York State, including specific co
 ## Related work
 *Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
+<<<<<<< HEAD
 Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data. We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
 
 Air pollution is known to have detrimental effects on human health. This study seeks to investigate air pollution, measured here as fine particulate matter (PM2.5), across New York State counties. In order to assess how PM2.5 exposure might be related to human health, we looked at asthma and cardiovascular (CVD) hospitalizations across New York counties. High PM2.5 causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease. 
@@ -37,9 +38,27 @@ Article: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/
 
 
 
+=======
+<<<<<<< HEAD
+Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental health data, and how to join data across sources.  
+
+=======
+<<<<<<< HEAD
+Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data. We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
+=======
+Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data.  
+>>>>>>> d3e85d688311e8935a433c27a0e76f1f0ba43cfc
+We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
+>>>>>>> 03e04d833a20c5fa7d79d950b1f9c8d4770a6f76
 
 ## Initial questions 
+
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
+
+Our team wanted to investigate how exposure to air quality might affect health outcomes. A common indicator for air quality is PM2.5 - referring to the particular matter in the air. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with high levels of PM2.5. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions. 
+
+Initially, our team was interested in investigating the relationship across New York City boroughs.  we were interested in would be fairly consistent and reliable, we thought hospitalization rates wou
+
 
 ## Data
 *Source, scraping method, cleaning, etc - Anjile*
