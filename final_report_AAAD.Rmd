@@ -35,15 +35,11 @@ Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, 
 
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
 
-Our team wanted to investigate how exposure to air quality might affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions. 
+Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter given its ubiquitous nature. Across the globe, it accounts for significant morbidity and, to a lesser degree, mortality. Indoor air pollution is also an important exposure pathway particularly for women and children who live in households that burn solid fuel for cooking and heating. For this project, we focused on ambient air quality because there is more available data and because indoor air pollution is less widespread in the United States and New York State than in other places around the world. 
 
-<<<<<<< HEAD
-Initially, our team was interested in investigating the relationship across New York City boroughs. However, we found that there wasn't enough data available to support   we were interested in would be fairly consistent and reliable, we thought hospitalization rates wou
-=======
-Initially, we looked at PM2.5 as a measure of air quality. We additionally looked into ozone levels across NY state counties. However, the data for both PM2.5 and ozone were sparse on their own. We finally settled on using the Air Quality Index (AQI) since it aggregates different measures of air pollutants including PM2.5 and ozone. 
->>>>>>> 275180aac495ee8a301df2ae8f570c86fc378f3a
+When someone breathes, they are exposed not to a single compound in isolation but rather to a mixture of compounds. Two compounds that are known to confer toxicity are ozone and fine particulate matter (PM2.5). Ozone is a fat soluble chemical than can bypass absorption in the upper respiratory system and penetrate down into the alveoli. PM2.5 is a tiny particle that, due to its size, can also travel deep into the alveoli. Both PM2.5 and ozone can have harmful local effects in the respiratory system and, because of their ability to cross from the lung into the bloodstream, can have harmful distal effects throughout the cardiovascular system. 
 
-Our question was focused on looking at hospitalizations and air pollutant exposure in New York City. However, investigating our data across New York City boroughs didn’t bring about substantial or interesting results because there wasn’t enough data available. Therefore, we adapted decided to look at AQI across New York State Counties.
+We were interested in how air pollution in New York State, measured through proxies such as PM2.5, ozone and air quality index (AQI), may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate trends in the relationship between air quality and acute health outcomes and areas (geographically and scientifically) requiring future research.
 
 ## Data
 *Source, scraping method, cleaning, etc - Anjile*

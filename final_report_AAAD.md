@@ -24,18 +24,30 @@ Initial questions
 
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
 
-Our team wanted to investigate how exposure to air quality might affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions.
+Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter given its ubiquitous nature. Across the globe, it accounts for significant morbidity and, to a lesser degree, mortality. Indoor air pollution is also an important exposure pathway particularly for women and children who live in households that burn solid fuel for cooking and heating. For this project, we focused on ambient air quality because there is more available data and because indoor air pollution is less widespread in the United States and New York State than in other places around the world.
 
-Initially, we looked at PM2.5 as a measure of air quality. We additionally looked into ozone levels across NY state counties. However, the data for both PM2.5 and ozone were sparse on their own. We finally settled on using the Air Quality Index (AQI) since it aggregates different measures of air pollutants including PM2.5 and ozone.
+When someone breathes, they are exposed not to a single compound in isolation but rather to a mixture of compounds. Two compounds that are known to confer toxicity are ozone and fine particulate matter (PM2.5). Ozone is a fat soluble chemical than can bypass absorption in the upper respiratory system and penetrate down into the alveoli. PM2.5 is a tiny particle that, due to its size, can also travel deep into the alveoli. Both PM2.5 and ozone can have harmful local effects in the respiratory system and, because of their ability to cross from the lung into the bloodstream, can have harmful distal effects throughout the cardiovascular system.
 
-Our question was focused on looking at hospitalizations and air pollutant exposure in New York City. However, investigating our data across New York City boroughs didn’t bring about substantial or interesting results because there wasn’t enough data available. Therefore, we adapted decided to look at AQI across New York State Counties.
+We were interested in how air pollution in New York State, measured through proxies such as PM2.5, ozone and air quality index (AQI), may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate trends in the relationship between air quality and acute health outcomes and areas (geographically and scientifically) requiring future research.
 
 Data
 ----
 
 *Source, scraping method, cleaning, etc - Anjile*
 
-Acknowledge multiple ways of measuring things - days, person-days, ug/m3 etc. Justify! - Ozone was not used bc not consistently measured across counties.
+For our data analysis, we used data from [New York State DOH HealthData](https://data.ny.gov/browse?category=Health&utf8=%E2%9C%93), [NYCDOH Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/publictracking.aspx), [United States Environmental Protection Agency AirData](https://www.epa.gov/outdoor-air-quality-data).
+
+[Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz). \* We noticed right away that this dataset only had data from 2014, which became an important factor in selecting future datasets to use in our analysis. \* The data, while we initially thought was presented by county, we found also included NYS regions (ie. New York City) which we removed in our cleaning process.
+
+[Age-adjusted cardiovascular disease hospitalization, rate per 10,000 by county](https://health.data.ny.gov/Health/Community-Health-Age-adjusted-Cardiovascular-Disea/3ycx-tfnb) \* This was the most complete dataset on CVD, and matched the data years of the asthma dataset (2012-2014). \* This dataset was doubled in size because of the two “health topics” that cardiovascular disease fell under, resulting in two rows of identical data for each county. We selected for the “cardiovascular disease indicator” health topic, and removed NYS regions in the cleaning process as well.
+
+[PM 2.5 by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData) \* This dataset had PM 2.5 by county data for 2000 - 2017, but the data was very incomplete, with only 13 out of 62 counties reporting measures. \* We selected for 2014, to match our outcome data. \* PM 2.5 was also measured in a variety of ways for the 13 counties, including ug/m^3, percent, and person-days, which is not standard across available datasets.
+
+[Ozone by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData) \* This dataset had ozone by county data for 2000 - 2016, but the data was very also incomplete as with the PM 2.5 data, with only 26 out of 62 counties reporting measures. \* We selected for 2014, to match our outcome data. \* Ozone was measured in days and person-days, which is also different from the PM 2.5 reporting.
+
+[Annual summary air quality index data by county, 2014](https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual) \* This dataset provided county level air quality index (0-500 scale) data for 2014, and we selected for New York State, but only 29 counties had available data. \* The data listed the number of good to hazardous air quality index days for each county, and the sum of total unhealthy days (unhealthy for sensitive groups or worse). \* The dataset also listed how many days out of the year each county measured for a series of pollutants, but we chose to use total unhealthy days as an aggregate measure of air quality.
+
+[NYS, hospitals per county](https://profiles.health.ny.gov/hospital/county_or_region/) \* There was no readily available dataset for number of hospitals per county, so we had to manually use the NYS Health Profiles to create a dataset with the number of hospitals per county.
 
 Exploratory analysis
 --------------------
