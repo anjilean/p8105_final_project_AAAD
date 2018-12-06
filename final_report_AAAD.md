@@ -19,11 +19,11 @@ Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, 
 Initial questions
 -----------------
 
-Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter given its ubiquitous nature. Across the globe, it accounts for significant morbidity and, to a lesser degree, mortality. Indoor air pollution is also an important exposure pathway particularly for women and children who live in households that burn solid fuel for cooking and heating. For this project, we focused on ambient air quality because there is more available data and because indoor air pollution is less widespread in the United States and New York State than in other places around the world.
+Our team wanted to investigate how exposure to poor air quality might adversely affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions.
 
-When someone breathes, they are exposed not to a single compound in isolation but rather to a mixture of compounds. Two compounds that are known to confer toxicity are ozone and fine particulate matter (PM2.5). Ozone is a fat soluble chemical than can bypass absorption in the upper respiratory system and penetrate down into the alveoli. PM2.5 is a tiny particle that, due to its size, can also travel deep into the alveoli. Both PM2.5 and ozone can have harmful local effects in the respiratory system and, because of their ability to cross from the lung into the bloodstream, can have harmful distal effects throughout the cardiovascular system.
+Initially, we looked at PM2.5 as a measure of air quality. We additionally looked into ozone levels across NY state counties. However, the data for both PM2.5 and ozone were sparse on their own. We finally settled on using the Air Quality Index (AQI) since it aggregates different measures of air pollutants including PM2.5 and ozone.
 
-We were interested in how air pollution in New York State, measured through proxies such as PM2.5, ozone and air quality index (AQI), may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate trends in the relationship between air quality and acute health outcomes and areas (geographically and scientifically) requiring future research.
+Our question was focused on looking at hospitalizations and air pollutant exposure in New York City. However, investigating our data across New York City boroughs didn’t bring about substantial or interesting results because there wasn’t enough data available. Therefore, we adapted decided to look at AQI across New York State Counties.
 
 Data
 ----
@@ -66,8 +66,6 @@ For our data analysis, we used data from [New York State DOH HealthData](https:/
 Exploratory analysis
 --------------------
 
-### Exploration
-
 Initial PM2.5 data exploration was focused on New York City counties. However, limited data was available, so NY state county data were selected to demonstrate the relationship between PM2.5 and hospitalizations of asthma and CVD.
 
 Over 2000-2014, levels of PM2.5 across all counties in New York State have steadily decreased.
@@ -77,14 +75,11 @@ Over 2000-2014, levels of PM2.5 across all counties in New York State have stead
 ``` r
 PM_county_NYS = read_csv("./data/PM2.5_county_NYS.csv") %>%
   janitor::clean_names() %>%
-  #filter(year == "2014") %>%
   select(county_name, year, output, measure) %>%
   separate(county_name, into = c("county", "delete", sep = " ")) %>% 
   select(-delete) %>%
-  mutate(county = recode(county, `New` = "New York"))
-## Warning: Expected 3 pieces. Missing pieces filled with `NA` in 882 rows [1,
-## 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ...].
-  #how to remove NA column?
+  mutate(county = recode(county, `New` = "New York")) %>% 
+  select(county, year, output, measure)
 ```
 
 #### Plot PM2.5 (ug/m3) over time, 2000-2014
@@ -93,11 +88,16 @@ PM_county_NYS = read_csv("./data/PM2.5_county_NYS.csv") %>%
 PM_plot_conc_allyears = PM_county_NYS %>%
   filter(measure == "Micrograms/cubic meter (LC)") %>%
   group_by(county, year) %>%
-  ggplot(aes(x = year, y = output, color = county)) + geom_line() + labs(title = "Ambient PM2.5 Concentrations in New York State, 2000-2014", x = "Year", y = "PM2.5 (ug/m3)")
+  ggplot(aes(x = year, y = output, color = county)) + 
+  geom_line() + 
+  labs(title = "Ambient PM2.5 Concentrations in New York State, 2000-2014", 
+       x = "Year", 
+       y = "PM2.5 (ug/m3)")
+
 PM_plot_conc_allyears
 ```
 
-<img src="final_report_AAAD_files/figure-markdown_github/unnamed-chunk-2-1.png" width="90%" />
+<img src="final_report_AAAD_files/figure-markdown_github/plot_pm_00_14-1.png" width="90%" />
 
 Next, we wanted to assess how PM2.5 exposure varied across counties in NY State.
 
@@ -107,13 +107,6 @@ Next, we wanted to assess how PM2.5 exposure varied across counties in NY State.
 nyc_pm25 = read_csv(file = "./data/data_AA/annual_aqi_by_county_2014.csv") %>% 
   janitor::clean_names() %>%
   filter(state == "New York")
-## Parsed with column specification:
-## cols(
-##   .default = col_integer(),
-##   State = col_character(),
-##   County = col_character()
-## )
-## See spec(...) for full column specifications.
 ```
 
 #### Days of PM2.5 by NY County
@@ -126,12 +119,11 @@ pm_hist = nyc_pm25 %>%
     x = "County",
     y = "Days with PM2.5") +
   geom_histogram(stat = "identity") + theme(axis.text.x = element_text(angle = 90))
-## Warning: Ignoring unknown parameters: binwidth, bins, pad
 
 pm_hist
 ```
 
-<img src="final_report_AAAD_files/figure-markdown_github/unnamed-chunk-4-1.png" width="90%" />
+<img src="final_report_AAAD_files/figure-markdown_github/pm_county_epa-1.png" width="90%" />
 
 Kings, Oneida, and Nassau reported the most number of days of PM2.5.
 
@@ -142,11 +134,16 @@ Literature shows that exposure to PM2.5 is associated with asthma and cardiovasc
 ``` r
 asthma_ER = read_csv("./data/Asthma_ER_Rate_10000.csv") %>%
   janitor::clean_names() %>%
-  #filter(county_name == "Bronx" | county_name == "Kings" | county_name == "Queens" | county_name == "Richmond" | county_name == "New York") %>%
   select(county_name, percentage_rate_ratio, data_years) %>%
   rename(asthma_ER_percent_rate = percentage_rate_ratio, 
          asthma_ER_years = data_years) %>%
-  filter(county_name != "Long Island" & county_name != "New York City" & county_name != "Mid-Hudson" & county_name != "Capital Region" & county_name != "Mohawk Valley" & county_name != "North Country" & county_name != "Tug Hill Seaway" & county_name != "Central NY" & county_name != "Southern Tier" & county_name != "Finger Lakes" & county_name != "Western NY" & county_name != "New York State (excluding NYC)" & county_name != "New York State") %>% #to remove non-county regions
+  filter(!county_name %in% c("Long Island", "New York City", "Mid-Hudson", 
+                             "Capital Region", "Mohawk Valley", 
+                             "North Country", "Tug Hill Seaway", 
+                             "Central NY", "Southern Tier", "Finger Lakes", 
+                             "Western NY", "New York State (excluding NYC)", 
+                             "New York State")) %>% 
+  #to remove non-county regions
   rename(county = county_name)
 ```
 
@@ -154,13 +151,19 @@ asthma_ER = read_csv("./data/Asthma_ER_Rate_10000.csv") %>%
 
 ``` r
 asthma_plot_14 = asthma_ER %>%
-    ggplot(aes(x = reorder(county, -asthma_ER_percent_rate), y = asthma_ER_percent_rate, group = 1)) + geom_histogram(stat = "identity") + theme(axis.text.x = element_text(angle = 90)) + labs(x = "County", y = "Asthma ER Admission Rate (per 10,000)", title = "Asthma Emergency Room (ER) Admission Rate (per 10,000) by County in New York State, 2014")
+    ggplot(aes(x = reorder(county, -asthma_ER_percent_rate), 
+               y = asthma_ER_percent_rate, group = 1)) + 
+  geom_histogram(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  labs(x = "County", 
+       y = "Asthma ER Admission Rate (per 10,000)", 
+       title = "Asthma Emergency Room (ER) Admission Rate (per 10,000) by County in New York State, 2014")
 ## Warning: Ignoring unknown parameters: binwidth, bins, pad
 asthma_plot_14 
 ## Warning: Removed 1 rows containing missing values (position_stack).
 ```
 
-<img src="final_report_AAAD_files/figure-markdown_github/unnamed-chunk-6-1.png" width="90%" />
+<img src="final_report_AAAD_files/figure-markdown_github/plot_asthma_er-1.png" width="90%" />
 
 #### Cardiovascular hospitalizations
 
@@ -169,14 +172,15 @@ cvd_data = read_csv(file = "./data/data_AK/Community_Health__Age-adjusted_Cardio
   janitor::clean_names() %>%
   filter(health_topic %in% "Cardiovascular Disease Indicators") %>% 
   select(county_name, event_count, average_number_of_denominator, 
-         percent_rate)
+         percent_rate) %>% 
+  rename(county = county_name)
 ```
 
 #### Age-Adjusted CVD Hospitalization Rate in NY State, 2012 - 2014
 
 ``` r
 cvd_data %>%
-  ggplot(aes(x = reorder(county_name, -percent_rate), y = percent_rate)) +
+  ggplot(aes(x = reorder(county, -percent_rate), y = percent_rate)) +
   labs(
     title = "CVD Hospitalization Rate in NY State, 2012 - 2014",
     x = "County",
