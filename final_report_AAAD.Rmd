@@ -29,13 +29,7 @@ We were interested in how air pollution in New York State, measured through prox
 ## Related work
 *Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
-Air pollution is known to have detrimental effects on human health. High PM2.5 causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease. Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data. We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
-
-
-
-Article: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/
-
-
+Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health, Columbia University, as well as previous classwork utilizing NOAA data inspired us to explore environmental data. Throughout our studies, we have learned that air pollution is known to have detrimental effects on human health. For instance, [high PM2.5](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/) and [ozone exposure](https://www.atsjournals.org/doi/abs/10.1164/rccm.201811-2106ED) causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease. We became personally interested about how air quality here may adversely affect our health outcomes upon learning that New York ranks tenth in [most polluted cities (by ozone)](https://www.lung.org/our-initiatives/healthy-air/sota/city-rankings/most-polluted-cities.html) in the United States.
 
 ## Initial questions 
 
