@@ -50,7 +50,7 @@ To access the CSV files used, [click here](https://drive.google.com/drive/u/0/fo
 [PM 2.5 by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData)
 
 -   This dataset had PM 2.5 data by county data for 2000 - 2017. However the data was very incomplete, with only 13 out of 62 counties reporting measures.
--   We selected for the year 2014 in order to aligh with our health outcomes data.
+-   We selected for the year 2014 in order to align with our health outcomes data.
 -   PM 2.5 was also measured in a variety of ways for the 13 counties, including ug/m^3, percent, and person-days. These measures were not standardized across all available datasets.
 
 [Annual summary air quality index data by county, 2014](https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual)
