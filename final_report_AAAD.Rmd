@@ -1,7 +1,6 @@
 ---
 title: "Final Project Report"
 author: "Anjile An (ja3237), Ashley Kang (aik2136), Divya Bisht (db3180), Amelia Grant-Alfieri (ag3911)"
-date: 'Due December 6, 2018'
 output: github_document
 ---
 
@@ -40,9 +39,9 @@ We were interested in how air pollution in New York State, measured through prox
 
 ## Data
 
-For our data analysis, we used data from [New York State DOH HealthData](https://data.ny.gov/browse?category=Health&utf8=%E2%9C%93), [NYCDOH Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/publictracking.aspx), [United States Environmental Protection Agency AirData](https://www.epa.gov/outdoor-air-quality-data). 
+For our data analysis, we used data from [New York State DOH HealthData](https://data.ny.gov/browse?category=Health&utf8=%E2%9C%93), [NYCDOH Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/publictracking.aspx), and [United States Environmental Protection Agency AirData](https://www.epa.gov/outdoor-air-quality-data). 
 
-[Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz). 
+[Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz) 
 
 * We noticed right away that this dataset only had data from 2014 from SPARCS, which became an important factor in selecting future datasets to use in our analysis.
 * The data, while we initially thought was presented by county, we found also included NYS regions (ie. New York City) which we removed in our cleaning process. 
@@ -51,6 +50,7 @@ For our data analysis, we used data from [New York State DOH HealthData](https:/
 
 * This was the most complete dataset on CVD from SPARCS, and matched the data years of the asthma dataset (2012-2014). 
 * This dataset was doubled in size because of the two “health topics” that cardiovascular disease fell under, resulting in two rows of identical data for each county. We selected for the “cardiovascular disease indicator” health topic, and removed NYS regions in the cleaning process as well.
+* This dataset was age-adjusted since the risk of developing cardiovascular disease increases with age.
 
 [PM 2.5 by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData) 
 
