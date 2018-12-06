@@ -2,12 +2,14 @@
 
 **[Ambient Air Quality and Asthma and Cardiovascular Disease Hospital Admissions in New York State, 2014, 2014.](https://akang7.github.io/AAADfinalproject.github.io/)**
 
+[Screencast](https://vimeo.com/304772516)
+
 Team members: 
 
 Anjile An, Ashley Kang, Amelia Grant-Alfieri, and Divya Bisht
 
 
-Deadlines:
+[Deadlines:](http://p8105.com/final_project.html)
 
 * November 26th: each make RMD with load/clean data, exploratory analysis.
 
@@ -17,4 +19,4 @@ Deadlines:
 
 * December 6th: everything due!!
 
-http://p8105.com/final_project.html
+
