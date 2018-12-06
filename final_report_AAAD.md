@@ -15,14 +15,10 @@ We were interested in how air pollution in New York State, measured through prox
 Related work
 ------------
 
-*Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
-
 Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health, Columbia University, as well as previous classwork utilizing NOAA data inspired us to explore environmental data. Throughout our studies, we have learned that air pollution is known to have detrimental effects on human health. For instance, [high PM2.5](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/) and [ozone exposure](https://www.atsjournals.org/doi/abs/10.1164/rccm.201811-2106ED) causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease. We became personally interested about how air quality here may adversely affect our health outcomes upon learning that New York ranks tenth in [most polluted cities (by ozone)](https://www.lung.org/our-initiatives/healthy-air/sota/city-rankings/most-polluted-cities.html) in the United States.
 
 Initial questions
 -----------------
-
-*What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
 
 Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter given its ubiquitous nature. Across the globe, it accounts for significant morbidity and, to a lesser degree, mortality. Indoor air pollution is also an important exposure pathway particularly for women and children who live in households that burn solid fuel for cooking and heating. For this project, we focused on ambient air quality because there is more available data and because indoor air pollution is less widespread in the United States and New York State than in other places around the world.
 
@@ -33,21 +29,39 @@ We were interested in how air pollution in New York State, measured through prox
 Data
 ----
 
-*Source, scraping method, cleaning, etc - Anjile*
-
 For our data analysis, we used data from [New York State DOH HealthData](https://data.ny.gov/browse?category=Health&utf8=%E2%9C%93), [NYCDOH Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/publictracking.aspx), [United States Environmental Protection Agency AirData](https://www.epa.gov/outdoor-air-quality-data).
 
-[Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz). \* We noticed right away that this dataset only had data from 2014, which became an important factor in selecting future datasets to use in our analysis. \* The data, while we initially thought was presented by county, we found also included NYS regions (ie. New York City) which we removed in our cleaning process.
+[Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz).
 
-[Age-adjusted cardiovascular disease hospitalization, rate per 10,000 by county](https://health.data.ny.gov/Health/Community-Health-Age-adjusted-Cardiovascular-Disea/3ycx-tfnb) \* This was the most complete dataset on CVD, and matched the data years of the asthma dataset (2012-2014). \* This dataset was doubled in size because of the two “health topics” that cardiovascular disease fell under, resulting in two rows of identical data for each county. We selected for the “cardiovascular disease indicator” health topic, and removed NYS regions in the cleaning process as well.
+-   We noticed right away that this dataset only had data from 2014, which became an important factor in selecting future datasets to use in our analysis.
+-   The data, while we initially thought was presented by county, we found also included NYS regions (ie. New York City) which we removed in our cleaning process.
 
-[PM 2.5 by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData) \* This dataset had PM 2.5 by county data for 2000 - 2017, but the data was very incomplete, with only 13 out of 62 counties reporting measures. \* We selected for 2014, to match our outcome data. \* PM 2.5 was also measured in a variety of ways for the 13 counties, including ug/m^3, percent, and person-days, which is not standard across available datasets.
+[Age-adjusted cardiovascular disease hospitalization, rate per 10,000 by county](https://health.data.ny.gov/Health/Community-Health-Age-adjusted-Cardiovascular-Disea/3ycx-tfnb)
 
-[Ozone by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData) \* This dataset had ozone by county data for 2000 - 2016, but the data was very also incomplete as with the PM 2.5 data, with only 26 out of 62 counties reporting measures. \* We selected for 2014, to match our outcome data. \* Ozone was measured in days and person-days, which is also different from the PM 2.5 reporting.
+-   This was the most complete dataset on CVD, and matched the data years of the asthma dataset (2012-2014).
+-   This dataset was doubled in size because of the two “health topics” that cardiovascular disease fell under, resulting in two rows of identical data for each county. We selected for the “cardiovascular disease indicator” health topic, and removed NYS regions in the cleaning process as well.
 
-[Annual summary air quality index data by county, 2014](https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual) \* This dataset provided county level air quality index (0-500 scale) data for 2014, and we selected for New York State, but only 29 counties had available data. \* The data listed the number of good to hazardous air quality index days for each county, and the sum of total unhealthy days (unhealthy for sensitive groups or worse). \* The dataset also listed how many days out of the year each county measured for a series of pollutants, but we chose to use total unhealthy days as an aggregate measure of air quality.
+[PM 2.5 by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData)
 
-[NYS, hospitals per county](https://profiles.health.ny.gov/hospital/county_or_region/) \* There was no readily available dataset for number of hospitals per county, so we had to manually use the NYS Health Profiles to create a dataset with the number of hospitals per county.
+-   This dataset had PM 2.5 by county data for 2000 - 2017, but the data was very incomplete, with only 13 out of 62 counties reporting measures.
+-   We selected for 2014, to match our outcome data.
+-   PM 2.5 was also measured in a variety of ways for the 13 counties, including ug/m^3, percent, and person-days, which is not standard across available datasets.
+
+[Ozone by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData)
+
+-   This dataset had ozone by county data for 2000 - 2016, but the data was very also incomplete as with the PM 2.5 data, with only 26 out of 62 counties reporting measures.
+-   We selected for 2014, to match our outcome data.
+-   Ozone was measured in days and person-days, which is also different from the PM 2.5 reporting.
+
+[Annual summary air quality index data by county, 2014](https://aqs.epa.gov/aqsweb/airdata/download_files.html#Annual)
+
+-   This dataset provided county level air quality index (0-500 scale) data for 2014, and we selected for New York State, but only 29 counties had available data.
+-   The data listed the number of good to hazardous air quality index days for each county, and the sum of total unhealthy days (unhealthy for sensitive groups or worse).
+-   The dataset also listed how many days out of the year each county measured for a series of pollutants, but we chose to use total unhealthy days as an aggregate measure of air quality.
+
+[NYS, hospitals per county](https://profiles.health.ny.gov/hospital/county_or_region/)
+
+-   There was no readily available dataset for number of hospitals per county, so we had to manually use the NYS Health Profiles to create a dataset with the number of hospitals per county.
 
 Exploratory analysis
 --------------------
