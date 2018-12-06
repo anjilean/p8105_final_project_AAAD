@@ -44,12 +44,12 @@ For our data analysis, we used data from [New York State DOH HealthData](https:/
 
 [Asthma emergency department visits, rate per 10,000 by county](https://health.data.ny.gov/Health/PA-Asthma-Emergency-Department-Visit-Rate-Per-10-0/4xmh-bgkz). 
 
-* We noticed right away that this dataset only had data from 2014, which became an important factor in selecting future datasets to use in our analysis.
+* We noticed right away that this dataset only had data from 2014 from SPARCS, which became an important factor in selecting future datasets to use in our analysis.
 * The data, while we initially thought was presented by county, we found also included NYS regions (ie. New York City) which we removed in our cleaning process. 
 
 [Age-adjusted cardiovascular disease hospitalization, rate per 10,000 by county](https://health.data.ny.gov/Health/Community-Health-Age-adjusted-Cardiovascular-Disea/3ycx-tfnb)
 
-* This was the most complete dataset on CVD, and matched the data years of the asthma dataset (2012-2014). 
+* This was the most complete dataset on CVD from SPARCS, and matched the data years of the asthma dataset (2012-2014). 
 * This dataset was doubled in size because of the two “health topics” that cardiovascular disease fell under, resulting in two rows of identical data for each county. We selected for the “cardiovascular disease indicator” health topic, and removed NYS regions in the cleaning process as well.
 
 [PM 2.5 by NYS county](https://apps.health.ny.gov/statistics/environmental/public_health_tracking/tracker/index.html#/airpollutionExportData) 
@@ -193,9 +193,9 @@ cvd_data %>%
 
 Asthma is chronic disease so asthma emergency room visit rates reflect asthma exacerbation incidents. In contrast, cardiovascular hospitalization rates do not differentiate between a one-time acute episode like a stroke or an exacerbation of an underlying cardiovascular condition like high blood pressure or arrhythmia. 
 
-Limitation
-- So many things in air, mixtures, hard to get data on/complicated to analyze. Include in future models.
--CVD is 2012-2014, asthma is just 2014
+### Limitation
+A major limitation of this analysis was missing data. Throughout the exploration phase, we found various measures of air quality for New York state that was incomplete. Although there are standards in place, definitions of air and air quality are not consistently measured across the different publicly available data sources that were looked at. For example, some air quality data was measured in ug/m3, while other data showed person-time exposed above a given threshold of “poor” levels of air quality. This makes it challenging to compare our findings to others. Additionally, certain counties in New York state did not have any PM2.5 data available. In future studies, we would recommend looking for data beyond what is publicly available to get a more complete picture of what is occurring across New York state. 
 
-It is critical to note that poor communities are more susceptible to the potential life-threatening, acute effects of air pollution because they are more likely to have chronic diseases like asthma and heart disease and are more likely to live in more highly contaminated neighborhoods. 
+Missing data also caused limitations when looking at hospitalization rates for asthma and CVD across New York state. The final analysis shows a plot for CVD hospitalizations from 2012-2014, while the asthma hospitalization plot is only for 2014. This inconsistently makes it challenging to make comparisons across the two plots. However, since the purpose of this analysis was not to compare CVD and asthma hospitalizations, but rather to look at how air quality might affect the health outcomes’ hospitalization rates, the analysis is valuable.
 
+Finally, there could be other ways to measure the health outcome rates for CVD and asthma instead of hospitalization rates, which might not be accurate representation of true rates of the diseases based hospital access and other factors such as insurance status that might affect a person’s choice to go to a hospital.
