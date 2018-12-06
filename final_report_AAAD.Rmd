@@ -33,7 +33,13 @@ Previous classwork utilizing NOAA data inspired us to explore other kinds of env
 We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. 
 
 ## Initial questions 
+
 *What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?*
+
+Our team wanted to investigate how exposure to air quality might affect health outcomes. A common indicator for air quality is PM2.5 - referring to the particular matter in the air. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with high levels of PM2.5. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions. 
+
+Initially, our team was interested in investigating the relationship across New York City boroughs.  we were interested in would be fairly consistent and reliable, we thought hospitalization rates wou
+
 
 ## Data
 *Source, scraping method, cleaning, etc - Anjile*
