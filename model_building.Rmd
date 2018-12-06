@@ -189,7 +189,7 @@ nys_joined %>%
   add_predictions(adj_asthma_model) %>%
   ggplot(aes(x = pred, y = resid)) + 
   labs(
-    title = "Plot of residuals against fitted values",
+    title = "Plot of residuals against fitted values, asthma",
     x = "Predicted values",
     y = "Residuals"
   ) +
@@ -228,13 +228,6 @@ cvd_rmse = cv_cvd %>%
   geom_violin()
 ```
 
-#### Putting RMSE plots together
-
-```{r rmse_plots}
-asthma_rmse + cvd_rmse
-```
-
-
 #### Diagnostics of adjusted CVD model
 
 ```{r cvd_diagnostics}
@@ -244,7 +237,7 @@ nys_joined %>%
   add_predictions(adj_cvd_model) %>%
   ggplot(aes(x = pred, y = resid)) + 
   labs(
-    title = "Plot of residuals against fitted values",
+    title = "Plot of residuals against fitted values, CVD",
     x = "Predicted values",
     y = "Residuals"
   ) +
@@ -254,17 +247,25 @@ nys_joined %>%
 
 The plot of the residuals for the adjusted CVD hospitalizations model shows that the residuals are widely distributed for the lower predicted values, and has similar issues to the asthma hospitalizations plot in that the small sample size pulling the fitted line.
 
+#### Putting RMSE plots together
+
+```{r rmse_plots}
+asthma_rmse + cvd_rmse
+```
+
 ## Final models
 
 ```{r final_mod}
-# Adjusted asthma model
+#### Adjusted asthma model ####
 adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
-summary(adj_asthma_model)
+
+# summary(adj_asthma_model)
 # summary(crude_asthma_model)
 
-# Adjusted CVD model
+#### Adjusted CVD model ####
 adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
-summary(adj_cvd_model)
+
+# summary(adj_cvd_model)
 # summary(crude_cvd_model)
 ```
 

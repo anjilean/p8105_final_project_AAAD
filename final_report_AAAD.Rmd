@@ -13,17 +13,18 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(modelr)
 library(mgcv)
+library(patchwork)
 
 theme_set(theme_bw() + theme(legend.position = "bottom"))
 ```
 
 ## Motivation
 
-Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter given its ubiquitous nature. Across the globe, it accounts for significant morbidity and, to a lesser degree, mortality. Indoor air pollution is also an important exposure pathway particularly for women and children who live in households that burn solid fuel for cooking and heating. For this project, we focused on ambient air quality because there is more available data and because indoor air pollution is less widespread in the United States and New York State than in other places around the world. 
+Unlike many factors we can control in determining our health, ambient (outdoor) air quality is almost impossible to alter. It accounts for significant morbidity and, indirectly, to mortality around the world. We were interested in how air pollution in New York State, measured through proxies such as PM2.5, ozone and air quality index (AQI), may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate trends in the relationship between air quality and acute health outcomes and areas (geographically and scientifically) requiring future research.
+
+#### Background
 
 When someone breathes, they are exposed not to a single compound in isolation but rather to a mixture of compounds. Two compounds that are known to confer toxicity are ozone and fine particulate matter (PM2.5). Ozone is a fat soluble chemical than can bypass absorption in the upper respiratory system and penetrate down into the alveoli. PM2.5 is a tiny particle that, due to its size, can also travel deep into the alveoli. Both PM2.5 and ozone can have harmful local effects in the respiratory system and, because of their ability to cross from the lung into the bloodstream, can have harmful distal effects throughout the cardiovascular system. 
-
-We were interested in how air pollution in New York State, measured through proxies such as PM2.5, ozone and air quality index (AQI), may lead to the acute exacerbation of chronic conditions like cardiovascular diseases and asthma as well as acute cardiovascular symptoms. Our goal is to illustrate trends in the relationship between air quality and acute health outcomes and areas (geographically and scientifically) requiring future research.
 
 ## Related work
 
@@ -31,13 +32,13 @@ Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, 
 
 ## Initial questions 
 
-<<<<<<< HEAD
+*How does exposure to air pollutants affect acute health outcomes?*
+
 Our team wanted to investigate how exposure to air quality might affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions. 
-=======
-Our team wanted to investigate how exposure to poor air quality might adversely affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions. 
->>>>>>> ad08715a4e59efc4a4178e338dd208a1c7cb43b2
 
 Initially, we looked at PM2.5 as a measure of air quality. We additionally looked into ozone levels across NY state counties. However, the data for both PM2.5 and ozone were sparse on their own. We finally settled on using the Air Quality Index (AQI) since it aggregates different measures of air pollutants including PM2.5 and ozone. 
+
+*What are trends across New York City? New York State?*
 
 Our question was focused on looking at hospitalizations and air pollutant exposure in New York City. However, investigating our data across New York City boroughs didn’t bring about substantial or interesting results because there wasn’t enough data available. Therefore, we adapted decided to look at AQI across New York State Counties.
 
@@ -193,19 +194,272 @@ cvd_data %>%
 Bronx recorded the highest rates of asthma emergency room admissions, which was more than double that of New York county (second highest rate), and nearly triple that of Kings county (third highest rate). Bronx also recorded the highest rates of cardiovascular hospitalization, with Niagara and Orleans following.
 
 ## Additional analysis
-*If you undertake formal statistical analyses, describe these in detail.*
-- Model building
-- Looked at associations, trends
+
+In our exploratory analysis, we found that the trends of hospitalizations and PM 2.5 do not trend together, and a potential confounder to that may be the number of hospitals in each county. However, given that the PM 2.5 and ozone datasets were missing many counties worth of data, we chose to use Air Quality Index measures (specifically number of unhealthy air quality days) as it is both an aggregate measure of all air pollutants and also had more complete data for New York State. 
+
+```{r asthma_data, message=FALSE, output=FALSE, include = FALSE}
+# Asthma emergency department visit rate per 10,000 by county
+# Source: NYSDOH Health Data NY
+# remove "regions"
+
+asthma_ed = read_csv(file = "./data/data_AA/asthma_ED_rate_10000.csv") %>% 
+  janitor::clean_names() %>%
+  select(county_name, event_count_rate, percentage_rate_ratio, data_years) %>%
+  filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
+  rename(asthma_hosp_percent_rate_ratio = percentage_rate_ratio, 
+         asthma_event_count = event_count_rate,
+         asthma_hosp_years = data_years,
+         county = county_name)
+```
+
+```{r cvd_data, message=FALSE, output=FALSE, include = FALSE}
+# Age-adjusted cardiovascular disease hospitalization rate per 10,000 by county
+# Source: NYSDOH Health Data NY
+# remove "regions"
+
+cvd_hosp = read_csv(file = "./data/data_AA/ageadjusted_cvd_hospitalization_rate_10000.csv") %>%
+  janitor::clean_names() %>%
+  filter(health_topic == "Cardiovascular Disease Indicators") %>%
+  filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
+  select(county_name, event_count, percent_rate, data_years) %>%
+  rename(county = county_name,
+         cvd_event_count = event_count,
+         cvd_percent_rate = percent_rate,
+         cvd_data_years = data_years)
+```
+
+```{r pm25_data, message=FALSE, output=FALSE, include = FALSE}
+# PM 2.5 annual summary data by county
+# Source: US EPA AQS, 2014
+
+nys_pm25 = read_csv(file = "./data/data_AA/annual_aqi_by_county_2014.csv") %>% 
+  janitor::clean_names() %>%
+  filter(state == "New York") %>%
+  select(county, good_days:median_aqi) %>%
+  rename(airq_good_days = good_days,
+         airq_moderate_days = moderate_days,
+         airq_unhealthy_for_sensitive_groups_days = unhealthy_for_sensitive_groups_days,
+         airq_unhealthy_days = unhealthy_days,
+         airq_very_unhealthy_days = very_unhealthy_days,
+         airq_hazardous_days = hazardous_days)
+```
+
+```{r hosp_data, message=FALSE, output=FALSE, include = FALSE}
+# NYS county population and number of hospitals
+# Source: NYS HealthData, 2014
+
+num_hosp = read_csv(file = "./data/data_AA/nys_county_hospitals_2014.csv") %>% 
+  janitor::clean_names() %>%
+  rename(county = geography) %>%
+  mutate(county = str_replace(county, " County", "")) %>%
+  select(county, population, number_of_hospitals)
+```
+
+```{r join_data, include = FALSE}
+asthma_cvd_join = full_join(asthma_ed, cvd_hosp, by = "county")
+pm25_numhosp_join = full_join(nys_pm25, num_hosp, by = "county")
+
+nys_joined = left_join(asthma_cvd_join, pm25_numhosp_join, by = "county")
+
+# change NAs to 0 for ease of regression analysis
+nys_joined[is.na(nys_joined)] = 0
+```
+
+**Checks before regression analysis:**
+
+```{r reg_checks, message=FALSE, output=FALSE}
+# Check for missing data
+
+sum(is.na(asthma_ed)) 
+sum(is.na(cvd_hosp))
+sum(is.na(nys_pm25))
+sum(is.na(num_hosp))
+```
+
+There are 2 pieces of missing data in `asthma_ed` file under Hamilton county, which could be a data entry error or due to the fact that Hamilton county has a very small population (4703) and none were hospitalized for asthma.
+
+#### Regression model
+
+We tested two models for each outcome (asthma hospitalizations and CVD hospitalizations): a crude model with just total days of unhealthy air quality per county as a predictor, and an adjusted model with total days of unhealthy air quality as well as number of hospitals per county. 
+
+Crude model:
+
+> asthma = unhealthy_aqi
+
+> cvd = unhealthy_aqi
+
+```{r crude_models}
+crude_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days, data = nys_joined)
+
+crude_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days, data = nys_joined)
+```
+
+
+Adjusted model:
+
+> asthma = unhealthy_aqi + num_hosp
+
+> cvd = unhealthy_aqi + num_hosp
+
+```{r adj_models}
+adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+
+adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+```
+
+
+Interaction is not included, as it makes interpretation difficult.
+
+#### Asthma model
+
+```{r asthma_cv}
+set.seed(1)
+cv_asthma = crossv_mc(nys_joined, 100) 
+
+# Fit candidate models
+options(warn = -1) # suppress printing all the warnings
+cv_asthma = cv_asthma %>%
+  mutate(crude_asthma_mod = map(train, ~lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days, data = .x)),
+         adj_asthma_mod = map(train, ~lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = .x))) %>%
+  mutate(rmse_crude = map2_dbl(crude_asthma_mod, test, ~rmse(model = .x, data = .y)),
+         rmse_adj = map2_dbl(adj_asthma_mod, test, ~rmse(model = .x, data = .y)))
+
+# Plot distribution of RMSE
+asthma_rmse = cv_asthma %>% 
+  select(starts_with("rmse")) %>% 
+  gather(key = model, value = rmse) %>% 
+  mutate(model = str_replace(model, "rmse_", ""),
+         model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse, fill = model)) + 
+  labs(
+    title = "Violin plots of RMSE, Asthma",
+    y = "RMSE",
+    x = "Model"
+  ) +
+  geom_violin()
+```
+
+#### CVD model
+
+```{r cvd_cv}
+set.seed(1)
+cv_cvd = crossv_mc(nys_joined, 100) 
+
+# Fit candidate models
+options(warn = -1) # suppress printing all the warnings
+cv_cvd = cv_cvd %>%
+  mutate(crude_cvd_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days, data = .x)),
+         adj_cvd_mod = map(train, ~lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = .x))) %>%
+  mutate(rmse_crude = map2_dbl(crude_cvd_mod, test, ~rmse(model = .x, data = .y)),
+         rmse_adj = map2_dbl(adj_cvd_mod, test, ~rmse(model = .x, data = .y)))
+
+# Plot distribution of RMSE
+cvd_rmse = cv_cvd %>% 
+  select(starts_with("rmse")) %>% 
+  gather(key = model, value = rmse) %>% 
+  mutate(model = str_replace(model, "rmse_", ""),
+         model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse, fill = model)) + 
+  labs(
+    title = "Violin plots of RMSE, CVD",
+    y = "RMSE",
+    x = "Model"
+  ) +
+  geom_violin()
+```
+
+#### Diagnostics of adjusted asthma model
+
+```{r asthma_diagnostics}
+# Plotting residuals
+asthma_diagnostics = nys_joined %>%
+  add_residuals(adj_asthma_model) %>%
+  add_predictions(adj_asthma_model) %>%
+  ggplot(aes(x = pred, y = resid)) + 
+  labs(
+    title = "Residuals vs fitted values, asthma",
+    x = "Predicted values",
+    y = "Residuals"
+  ) +
+  geom_point(alpha = .5) + 
+  geom_smooth(se = FALSE)
+```
+
+#### Diagnostics of adjusted CVD model
+
+```{r cvd_diagnostics}
+# Plotting residuals
+cvd_diagnostics = nys_joined %>%
+  add_residuals(adj_cvd_model) %>%
+  add_predictions(adj_cvd_model) %>%
+  ggplot(aes(x = pred, y = resid)) + 
+  labs(
+    title = "Residuals vs fitted values, CVD",
+    x = "Predicted values",
+    y = "Residuals"
+  ) +
+  geom_point(alpha = .5) + 
+  geom_smooth(se = FALSE)
+```
+
+#### Putting model diagnostics together 
+
+```{r diagnostics_joined}
+asthma_diagnostics + cvd_diagnostics
+```
+
+The plot of the residuals illustrates that the model does not predict higher values very well, which makes sense given that the rate of asthma hospitalizations events is generally not very high, save for select counties in NYC. The values cluster in the lower end of the distribution, and the fitted line jumps around, maybe in large part due to the small number of counties.
+
+The plot of the residuals for the adjusted CVD hospitalizations model shows that the residuals are widely distributed for the lower predicted values, and has similar issues to the asthma hospitalizations plot in that the small sample size pulling the fitted line.
+
+#### Putting RMSE plots together
+
+```{r rmse_plots}
+asthma_rmse + cvd_rmse
+```
+
+In our cross validation of the asthma model as well as the CVD model, we see that in the plots of the RMSE show the adjusted model to be slightly better than the crude model. As our sample size is still relatively small and with large disparities between counties (given that New York State has urban and rural pockets), the plot of the residuals with the fitted values sees the fitted line jump across the predicted values. 
+
+#### Final models
+
+```{r final_mod}
+#### Adjusted asthma model ####
+adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+
+# summary(adj_asthma_model)
+# summary(crude_asthma_model)
+
+#### Adjusted CVD model ####
+adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+
+# summary(adj_cvd_model)
+# summary(crude_cvd_model)
+```
+
+In our final adjusted asthma model, we see that the adjusted R-squared value is 0.4044 (compared to 0.2755 for the crude model), with a statistically significant p-value of 8.579e-08 (compared to 7.099e-06 for the crude model). This indicates a moderately well fitting model for asthma and air quality, but could still benefit from the addition of other predictors.
+
+In our final adjusted CVD model, we see that the adjusted R-squared value is 0.0488 (compared to 0.0166 for the crude model), with a statistically insignificant p-value of 0.08556 (compared to 0.1592 for the crude model). This indicates that the while the adjusted model is better than the crude, it is still not a good model in predicting the effects of air quality on CVD hospitalizations in New York State.
+ 
 
 ## Discussion
-*What were your findings? Are they what you expect? What insights into the data can you make?*
+
+In our visualizations, we see that there are large disparities in rate of hospitalizations for asthma and cardiovascular disease at the county level. Most noticeably, we see that Bronx County has more than double the amount of asthma hospitalizations per 10,000 population than any other county. In the plots of ambient PM 2.5 against asthma admission rates, we see that the Bronx falls towards the higher range of PM 2.5 as a clear outlier, where the rest of the points follow a clear positive trending line. However, New York County (Manhattan) has the highest plotted PM 2.5. An interesting finding is that four out of the five boroughs of New York City (missing Richmond County, or Staten Island) are in the top 5 of asthma hospitalizations. This is not surprising, given that New York City as a large urban center that has much more possible pollutants driving the rate of hospitalizations, and these results give us a clear picture of where the burden of asthma lies. It’s important to note that all five boroughs are featured in the plot of ambient PM 2.5 and asthma admissions - meaning they had reported measures of air quality data, while not all state counties did not. Interventions should target means to reduce ambient PM 2.5 in Manhattan and the Bronx, and explore other factors (including social determinants of health) in addressing asthma prevalence in the Bronx. 
+
+Bronx County also rises above all other counties in terms of age-adjusted cardiovascular disease hospitalizations, but not by as much as for asthma hospitalizations. The other New York City borough in the top five is Kings County (Brooklyn). The plot of CVD and ambient PM 2.5 does not have as clear of a positive linear trend, and sees the available data clustered in the middle range of values for hospitalizations. In the scatterplot, we also see that there are two values (Essex County and Chautauqua County) that may not be outliers, but clearly fall towards the lower range of CVD hospitalizations. We are somewhat surprised by the results, as our hypothesis was that ambient air quality would negatively affect CVD hospitalizations similarly to asthma hospitalizations. This indicates that there may be many additional covariates to consider, and that the mechanisms of which poor air quality affects asthma and CVD are different. 
+
+Looking at our final models and their corresponding RMSE violin plots, we see that the adjusted model is better for both asthma and CVD hospitalizations. However, the asthma model is moderately well fitting with an R-squared value of 0.4044, whereas the CVD model is not well fitting with an R-squared value of 0.0488.
 
 
-Asthma is chronic disease so asthma emergency room visit rates reflect asthma exacerbation incidents. In contrast, cardiovascular hospitalization rates do not differentiate between a one-time acute episode like a stroke or an exacerbation of an underlying cardiovascular condition like high blood pressure or arrhythmia. 
+### Limitations
 
-### Limitation
-A major limitation of this analysis was missing data. Throughout the exploration phase, we found various measures of air quality for New York state that was incomplete. Although there are standards in place, definitions of air and air quality are not consistently measured across the different publicly available data sources that were looked at. For example, some air quality data was measured in ug/m3, while other data showed person-time exposed above a given threshold of “poor” levels of air quality. This makes it challenging to compare our findings to others. Additionally, certain counties in New York state did not have any PM2.5 data available. In future studies, we would recommend looking for data beyond what is publicly available to get a more complete picture of what is occurring across New York state. 
+A major limitation of this analysis was missing data. Throughout the exploration phase, we found various measures of air quality for New York State that was incomplete. Although there are standards in place, definitions of air and air quality are not consistently measured across the different publicly available data sources that were looked at. For example, some air quality data was measured in ug/m3, while other data showed person-time exposed above a given threshold of “poor” levels of air quality. This makes it challenging to compare our findings to others. Additionally, certain counties in New York state did not have any PM 2.5 data available. In future studies, we would recommend looking for data beyond what is publicly available to get a more complete picture of what is occurring across New York state. 
 
-Missing data also caused limitations when looking at hospitalization rates for asthma and CVD across New York state. The final analysis shows a plot for CVD hospitalizations from 2012-2014, while the asthma hospitalization plot is only for 2014. This inconsistently makes it challenging to make comparisons across the two plots. However, since the purpose of this analysis was not to compare CVD and asthma hospitalizations, but rather to look at how air quality might affect the health outcomes’ hospitalization rates, the analysis is valuable.
+Missing data also caused limitations when looking at hospitalization rates for asthma and CVD across New York state. The final analysis shows a plot for CVD hospitalizations from 2012-2014, while the asthma hospitalization plot is only for 2014. This inconsistently makes it challenging to make comparisons across the two plots. However, since the purpose of this analysis was not to compare CVD and asthma hospitalizations, but rather to look at how air quality might affect the health outcomes’ hospitalization rates, so the analysis is valuable. The missing data also affected the model building and analysis, as original analysis of just New York City was largely underpowered. However, as New York State has a large collection of open source data, which other states may not have, so we decided to simply expand our range to the rest of the counties in the state.
 
-Finally, there could be other ways to measure the health outcome rates for CVD and asthma instead of hospitalization rates, which might not be accurate representation of true rates of the diseases based hospital access and other factors such as insurance status that might affect a person’s choice to go to a hospital.
+Asthma is a chronic disease, so asthma emergency room visit rates reflect asthma exacerbation incidents. In contrast, cardiovascular hospitalization rates do not differentiate between a one-time acute episode like a stroke or an exacerbation of an underlying cardiovascular condition like high blood pressure or arrhythmia. There also could be other ways to measure the health outcome rates for CVD and asthma instead of hospitalization rates, which might not be accurate representation of true rates of the diseases based hospital access and other factors such as insurance status that might affect a person’s choice to go to a hospital.
+
+### Conclusion
+
+The analysis confirms that ambient PM2.5 exposure is associated with asthma and CVD, using hospitalization rates as the proxy indicator. New York City counties, including the Bronx and New York, have high ambient PM2.5 exposure. Bronx counties has the most number of hospitalizations per 10,000 people for both asthma and CVD. Our analysis shows that exposure to ambient PM2.5 does not account for all the disparity in hospitalization rates seen in the Bronx, it does account for some of it. Interventions related to air quality should be focused in the Bronx and New York Counties. 
+
+Future studies should look into measures of air quality that are consistently collected for better comparability purposes. Additionally, different indicators for asthma and CVD would be helpful since hospitalization rates might not be the best measure for the purposes of this research question.
