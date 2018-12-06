@@ -19,13 +19,13 @@ Research conducted by Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, 
 Initial questions
 -----------------
 
-*How does exposure to air pollutants affect acute health outcomes?*
+**How does exposure to air pollutants affect acute health outcomes?**
 
 Our team wanted to investigate how exposure to air quality might affect health outcomes. Based on our own knowledge and a basic literature review, we confirmed that health outcomes like asthma and cardiovascular disease are often associated with poor air quality. Hospitalization data for asthma and cardiovascular disease was selected to show rates of the two diseases across geographic regions.
 
 Initially, we looked at PM2.5 as a measure of air quality. We additionally looked into ozone levels across NY state counties. However, the data for both PM2.5 and ozone were sparse on their own. We finally settled on using the Air Quality Index (AQI) since it aggregates different measures of air pollutants including PM2.5 and ozone.
 
-*What are trends across New York City? New York State?*
+**What are trends across New York City? New York State?**
 
 Our question was focused on looking at hospitalizations and air pollutant exposure in New York City. However, investigating our data across New York City boroughs didn’t bring about substantial or interesting results because there wasn’t enough data available. Therefore, we adapted decided to look at AQI across New York State Counties.
 
@@ -126,6 +126,8 @@ pm_hist
 Kings, Oneida, and Nassau reported the most number of days of PM2.5.
 
 Literature shows that exposure to PM2.5 is associated with asthma and cardiovascular disease. Therefore, we wanted to assess hospitalization of asthma and CVD across counties.
+
+As we can see here, there is a lot of missing PM 2.5 data at the county level, and various measures (percent, person-days, ug/m^3). Given that the US EPA AQI annual summary datasets have more available data covering more NYS counties on days of adverse air quality, we will utilize "total unhealthy air quality days" as a proxy for overall poor air quality.
 
 #### Asthma ER Admissions Rate Dataset, 2014
 
