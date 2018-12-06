@@ -17,8 +17,11 @@ Related work
 
 *Anything that inspired you, such as a paper, a web site, or something we discussed in class.*
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data. We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health. ======= Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data.
-We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health.
+Previous classwork utilizing NOAA data inspired us to explore other kinds of environmental data. We were also influenced by air pollution researchers at Columbia University like Dr. Frederica Perera, Dr. Marianthi-Anna Kioumourtzoglou, and others at the Center for Children's Environmental Health.
+
+Air pollution is known to have detrimental effects on human health. This study seeks to investigate air pollution, measured here as fine particulate matter (PM2.5), across New York State counties. In order to assess how PM2.5 exposure might be related to human health, we looked at asthma and cardiovascular (CVD) hospitalizations across New York counties. High PM2.5 causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease.
+
+Article: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/>
 
 Initial questions
 -----------------
@@ -37,10 +40,6 @@ Exploratory analysis
 
 Background & Objectives
 -----------------------
-
-Air pollution is known to have detrimental effects on human health. This study seeks to investigate air pollution, measured here as fine particulate matter (PM2.5), across New York State counties. In order to assess how PM2.5 exposure might be related to human health, we looked at asthma and cardiovascular (CVD) hospitalizations across New York counties. High PM2.5 causes damage to the respiratory system, which puts individuals at risk for health outcomes like asthma and heart disease.
-
-Article: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5260007/>
 
 ### Exploration
 
