@@ -104,11 +104,15 @@ We will test two models each for asthma hospitalizations and CVD hospitalization
 
 Crude model:
 
-> asthma = pm25 cvd = pm25
+> asthma = unhealthy\_aqi
+
+> cvd = unhealthy\_aqi
 
 Adjusted model:
 
-> asthma = pm25 + num\_hosp cvd = pm25 + num\_hosp
+> asthma = unhealthy\_aqi + num\_hosp
+
+> cvd = unhealthy\_aqi + num\_hosp
 
 Interaction is not included, as it makes interpretation difficult.
 
@@ -117,11 +121,9 @@ Interaction is not included, as it makes interpretation difficult.
 ``` r
 # Crude asthma model
 crude_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days, data = nys_joined)
-summary(crude_asthma_model)
 
 # Adjusted asthma model
 adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
-summary(adj_asthma_model)
 ```
 
 #### CVD model
@@ -129,11 +131,9 @@ summary(adj_asthma_model)
 ``` r
 # Crude cvd model
 crude_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days, data = nys_joined)
-summary(crude_cvd_model)
 
 # Adjusted cvd model
 adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
-summary(adj_cvd_model)
 ```
 
 Cross validation
@@ -159,9 +159,9 @@ cv_asthma %>%
   gather(key = model, value = rmse) %>% 
   mutate(model = str_replace(model, "rmse_", ""),
          model = fct_inorder(model)) %>% 
-  ggplot(aes(x = model, y = rmse)) + 
+  ggplot(aes(x = model, y = rmse, fill = model)) + 
   labs(
-    title = "Violin plots of RMSE, Asthma",
+    title = "Violin plots of RMSE, Asthma Hospitalizations",
     y = "RMSE",
     x = "Model"
   ) +
@@ -212,9 +212,9 @@ cv_cvd %>%
   gather(key = model, value = rmse) %>% 
   mutate(model = str_replace(model, "rmse_", ""),
          model = fct_inorder(model)) %>% 
-  ggplot(aes(x = model, y = rmse)) + 
+  ggplot(aes(x = model, y = rmse, fill = model)) + 
   labs(
-    title = "Violin plots of RMSE, CVD",
+    title = "Violin plots of RMSE, CVD Hospitalizations",
     y = "RMSE",
     x = "Model"
   ) +
@@ -244,3 +244,62 @@ nys_joined %>%
 <img src="model_building_files/figure-markdown_github/cvd_diagnostics-1.png" width="90%" />
 
 The plot of the residuals for the adjusted CVD hospitalizations model shows that the residuals are widely distributed for the lower predicted values, and has similar issues to the asthma hospitalizations plot in that the small sample size pulling the fitted line.
+
+Final models
+------------
+
+``` r
+# Adjusted asthma model
+adj_asthma_model = lm(asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+summary(adj_asthma_model)
+## 
+## Call:
+## lm(formula = asthma_hosp_percent_rate_ratio ~ total_unhealthy_days + 
+##     number_of_hospitals, data = nys_joined)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -143.08  -25.36   -8.35   19.10  403.28 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)            63.033     11.203   5.627 5.34e-07 ***
+## total_unhealthy_days   21.204      8.780   2.415 0.018847 *  
+## number_of_hospitals     9.170      2.452   3.740 0.000419 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 66.47 on 59 degrees of freedom
+## Multiple R-squared:  0.424,  Adjusted R-squared:  0.4044 
+## F-statistic: 21.71 on 2 and 59 DF,  p-value: 8.579e-08
+# summary(crude_asthma_model)
+
+# Adjusted CVD model
+adj_cvd_model = lm(cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, data = nys_joined)
+summary(adj_cvd_model)
+## 
+## Call:
+## lm(formula = cvd_percent_rate ~ total_unhealthy_days + number_of_hospitals, 
+##     data = nys_joined)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -58.03 -14.66   0.80  13.00  41.60 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)          119.9347     3.4517  34.747   <2e-16 ***
+## total_unhealthy_days   0.6267     2.7051   0.232   0.8176    
+## number_of_hospitals    1.3145     0.7555   1.740   0.0871 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 20.48 on 59 degrees of freedom
+## Multiple R-squared:  0.07996,    Adjusted R-squared:  0.04877 
+## F-statistic: 2.564 on 2 and 59 DF,  p-value: 0.08556
+# summary(crude_cvd_model)
+```
+
+In our final adjusted asthma model, we see that the adjusted R-squared value is 0.4044 (compared to 0.2755 for the crude model), with a statistically significant p-value of 8.579e-08 (compared to 7.099e-06 for the crude model). This indicates a moderately well fitting model for asthma and air quality, but could still benefit from the addition of other predictors.
+
+In our final adjusted CVD model, we see that the adjusted R-squared value is 0.0488 (compared to 0.0166 for the crude model), with a statistically insignificant p-value of 0.08556 (compared to 0.1592 for the crude model). This indicates that the while the adjusted model is better than the crude, it is still not a good model in predicting the effects of air quality on CVD hospitalizations in New York State.
