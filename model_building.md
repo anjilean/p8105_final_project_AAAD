@@ -13,7 +13,7 @@ To build our model, we are looking at New York State asthma hospitalizations dat
 # Source: NYSDOH Health Data NY
 # remove "regions"
 
-asthma_ed = read_csv(file = "./data_AA/asthma_ED_rate_10000.csv") %>% 
+asthma_ed = read_csv(file = "./data/data_AA/asthma_ED_rate_10000.csv") %>% 
   janitor::clean_names() %>%
   select(county_name, event_count_rate, percentage_rate_ratio, data_years) %>%
   filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
@@ -28,7 +28,7 @@ asthma_ed = read_csv(file = "./data_AA/asthma_ED_rate_10000.csv") %>%
 # Source: NYSDOH Health Data NY
 # remove "regions"
 
-cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000.csv") %>%
+cvd_hosp = read_csv(file = "./data/data_AA/ageadjusted_cvd_hospitalization_rate_10000.csv") %>%
   janitor::clean_names() %>%
   filter(health_topic == "Cardiovascular Disease Indicators") %>%
   filter(!county_name %in% c("Capital Region", "Central NY", "Finger Lakes", "Long Island", "Mid-Hudson", "Mohawk Valley", "New York City", "New York State", "New York State (excluding NYC)", "North Country", "Southern Tier", "Tug Hill Seaway", "Western NY")) %>% 
@@ -43,7 +43,7 @@ cvd_hosp = read_csv(file = "./data_AA/ageadjusted_cvd_hospitalization_rate_10000
 # PM 2.5 annual summary data by county
 # Source: US EPA AQS, 2014
 
-nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>% 
+nys_pm25 = read_csv(file = "./data/data_AA/annual_aqi_by_county_2014.csv") %>% 
   janitor::clean_names() %>%
   filter(state == "New York") %>%
   select(county, good_days:median_aqi) %>%
@@ -59,7 +59,7 @@ nys_pm25 = read_csv(file = "./data_AA/annual_aqi_by_county_2014.csv") %>%
 # NYS county population and number of hospitals
 # Source: NYS HealthData, 2014
 
-num_hosp = read_csv(file = "./data_AA/nys_county_hospitals_2014.csv") %>% 
+num_hosp = read_csv(file = "./data/data_AA/nys_county_hospitals_2014.csv") %>% 
   janitor::clean_names() %>%
   rename(county = geography) %>%
   mutate(county = str_replace(county, " County", "")) %>%
@@ -154,21 +154,19 @@ cv_asthma = cv_asthma %>%
          rmse_adj = map2_dbl(adj_asthma_mod, test, ~rmse(model = .x, data = .y)))
 
 # Plot distribution of RMSE
-cv_asthma %>% 
+asthma_rmse = cv_asthma %>% 
   select(starts_with("rmse")) %>% 
   gather(key = model, value = rmse) %>% 
   mutate(model = str_replace(model, "rmse_", ""),
          model = fct_inorder(model)) %>% 
   ggplot(aes(x = model, y = rmse, fill = model)) + 
   labs(
-    title = "Violin plots of RMSE, Asthma Hospitalizations",
+    title = "Violin plots of RMSE, Asthma",
     y = "RMSE",
     x = "Model"
   ) +
   geom_violin()
 ```
-
-<img src="model_building_files/figure-markdown_github/asthma_cv-1.png" width="90%" />
 
 #### Diagnostics of adjusted asthma model
 
@@ -207,21 +205,27 @@ cv_cvd = cv_cvd %>%
          rmse_adj = map2_dbl(adj_cvd_mod, test, ~rmse(model = .x, data = .y)))
 
 # Plot distribution of RMSE
-cv_cvd %>% 
+cvd_rmse = cv_cvd %>% 
   select(starts_with("rmse")) %>% 
   gather(key = model, value = rmse) %>% 
   mutate(model = str_replace(model, "rmse_", ""),
          model = fct_inorder(model)) %>% 
   ggplot(aes(x = model, y = rmse, fill = model)) + 
   labs(
-    title = "Violin plots of RMSE, CVD Hospitalizations",
+    title = "Violin plots of RMSE, CVD",
     y = "RMSE",
     x = "Model"
   ) +
   geom_violin()
 ```
 
-<img src="model_building_files/figure-markdown_github/cvd_cv-1.png" width="90%" />
+#### Putting RMSE plots together
+
+``` r
+asthma_rmse + cvd_rmse
+```
+
+<img src="model_building_files/figure-markdown_github/rmse_plots-1.png" width="90%" />
 
 #### Diagnostics of adjusted CVD model
 
